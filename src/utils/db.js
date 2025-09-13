@@ -1,7 +1,7 @@
 export async function getUsers() {
   // const res = await fetch("/api/users"); 
   try {
-    const res = await fetch("http://localhost:5000/api/users"); 
+    const res = await fetch("/api/users"); 
 
     if (!res.ok) {
       throw new Error(`Failed to fetch attempts: ${res.status}`);
@@ -17,7 +17,7 @@ export async function getUsers() {
 
 export async function getUserSessions(userId){
   try {
-    const res = await fetch(`http://localhost:5000/api/user/sessions/${userId}`);
+    const res = await fetch(`/api/user/sessions/${userId}`);
 
     if (!res.ok) {
       throw new Error(`Failed to fetch attempts: ${res.status}`);
@@ -33,7 +33,7 @@ export async function getUserSessions(userId){
 
 export async function getSessionClimbs(sessionID){
   try {
-      const res = await fetch(`http://localhost:5000/api/session/${sessionID}`);
+      const res = await fetch(`/api/session/${sessionID}`);
 
       if (!res.ok) {
       throw new Error(`Failed to fetch attempts: ${res.status}`);
@@ -49,7 +49,7 @@ export async function getSessionClimbs(sessionID){
 
 export async function getUserSends(userId){
   try {  
-    const res = await fetch(`http://localhost:5000/api/sends/${userId}`);
+    const res = await fetch(`/api/sends/${userId}`);
     
     if (!res.ok) {
       throw new Error(`Failed to fetch attempts: ${res.status}`);
