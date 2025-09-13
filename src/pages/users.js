@@ -19,12 +19,21 @@ export default function Users() {
     loadData();
   }, []);
 
-  console.log('data', data)
+  // console.log('data', data)
+
+  const userData = JSON.stringify(data, null, 2);
+  // console.log('userData', userData)
 
   return (
     <div>
       <div>users</div>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
+      <ul>
+        {data && data.map((user) => (
+          <li key={user.userId}>{user.displayName} ({user.email})</li>
+        ))}
+      </ul>
+      
     </div>
   )
 }
