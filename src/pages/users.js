@@ -5,7 +5,7 @@ import { getUsers } from '@/utils/db';
 // use Shadcn for component library
 
 export default function Users() {
-  const [data, setData] = useState(0)
+  const [data, setData] = useState(0);
 
   useEffect(() => {
     async function loadData() {
