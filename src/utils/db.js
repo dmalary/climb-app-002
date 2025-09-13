@@ -1,25 +1,67 @@
 //UPDATE ALL WITH TRY CATCH ERR HANDLING
 export async function getUsers() {
   // const res = await fetch("/api/users"); 
-  const res = await fetch("http://localhost:5000/api/users"); 
-  // const data = await res.json();
-  // console.log(data);
-  return res.json();
+  try {
+    const res = await fetch("http://localhost:5000/api/users"); 
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch attempts: ${res.status}`);
+    }
+
+    return await res.json();
+
+  } catch {
+    console.error("Error fetching session attempts:", err);
+    return null;
+  }
 }
 
 export async function getUserSessions(userId){
-  const res = await fetch(`http://localhost:5000/api/user/sessions/${userId}`);
-  return res.json();
+  try {
+    const res = await fetch(`http://localhost:5000/api/user/sessions/${userId}`);
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch attempts: ${res.status}`);
+    }
+
+    return await res.json();
+
+  } catch {
+    console.error("Error fetching session attempts:", err);
+    return null;
+  }
 }
 
 export async function getSessionClimbs(sessionID){
-    const res = await fetch(`http://localhost:5000/api/session/${sessionID}`);
-  return res.json();
+  try {
+      const res = await fetch(`http://localhost:5000/api/session/${sessionID}`);
+
+      if (!res.ok) {
+      throw new Error(`Failed to fetch attempts: ${res.status}`);
+    }
+
+    return await res.json();
+
+  } catch {
+    console.error("Error fetching session attempts:", err);
+    return null;
+  }
 }
 
 export async function getUserSends(userId){
-  const res = await fetch(`http://localhost:5000/api/sends/${userId}`);
-return res.json()
+  try {  
+    const res = await fetch(`http://localhost:5000/api/sends/${userId}`);
+    
+    if (!res.ok) {
+      throw new Error(`Failed to fetch attempts: ${res.status}`);
+    }
+
+    return await res.json();
+
+  } catch {
+    console.error("Error fetching session attempts:", err);
+    return null;
+  }
 }
 
 // export async function getHardestSend(userId){
