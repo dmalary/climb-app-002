@@ -1,4 +1,3 @@
-//UPDATE ALL WITH TRY CATCH ERR HANDLING
 export async function getUsers() {
   // const res = await fetch("/api/users"); 
   try {
@@ -10,7 +9,7 @@ export async function getUsers() {
 
     return await res.json();
 
-  } catch {
+  } catch (err) {
     console.error("Error fetching session attempts:", err);
     return null;
   }
@@ -26,7 +25,7 @@ export async function getUserSessions(userId){
 
     return await res.json();
 
-  } catch {
+  } catch (err) {
     console.error("Error fetching session attempts:", err);
     return null;
   }
@@ -42,7 +41,7 @@ export async function getSessionClimbs(sessionID){
 
     return await res.json();
 
-  } catch {
+  } catch (err) {
     console.error("Error fetching session attempts:", err);
     return null;
   }
@@ -58,7 +57,7 @@ export async function getUserSends(userId){
 
     return await res.json();
 
-  } catch {
+  } catch (err) {
     console.error("Error fetching session attempts:", err);
     return null;
   }
