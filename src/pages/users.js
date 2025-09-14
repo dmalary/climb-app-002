@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 import { getUsers } from '@/utils/db';
 
-// use Shadcn for component library
-
 export default function Users() {
   const [data, setData] = useState(0);
 
