@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 
 import { getUserSessions } from '@/utils/db';
 
+import { Button } from '@/components/ui/button';
+
 export default function Sessions() {
   const router = useRouter()
   const [data, setData] = useState(0);
@@ -28,8 +30,9 @@ export default function Sessions() {
       {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
       <ul>
         {data && data.map((session) => (
-          <li key={session.sessionId}>{session.notes}</li>
+          <li key={session.sessionId}>{session.notes} <Button>Select</Button></li>
         ))}
+        
       </ul>
       
     </div>
