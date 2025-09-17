@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
-
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 import { getUsers } from '@/utils/db';
 
 export default function Users() {
@@ -16,21 +24,28 @@ export default function Users() {
     }
     loadData();
   }, []);
-
   // console.log('data', data)
-
-  const userData = JSON.stringify(data, null, 2);
-  // console.log('userData', userData)
 
   return (
     <div>
-      <div>users</div>
-      {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
-      <ul>
-        {data && data.map((user) => (
-          <li key={user.userId}>{user.displayName} ({user.email})</li>
+      <Table>
+        <TableCaption>User table</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead>id</TableHead>
+            <TableHead>username</TableHead>
+            <TableHead>email</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {data && data.map((user) => (
+          <TableRow key={user.id}>
+            <TableCell>{user.username}</TableCell>
+            <TableCell>{user.email}</TableCell>
+          </TableRow>
         ))}
-      </ul>
+        </TableBody>
+      </Table>
       
     </div>
   )
