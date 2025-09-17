@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Table,
   TableBody,
@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/table"
 import { getUsers } from '@/utils/db';
 
+// export default function Users({ data }) {
 export default function Users() {
   const [data, setData] = useState(0);
 
@@ -27,26 +28,28 @@ export default function Users() {
   // console.log('data', data)
 
   return (
-    <div>
-      <Table>
-        <TableCaption>User table</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead>id</TableHead>
-            <TableHead>username</TableHead>
-            <TableHead>email</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data && data.map((user) => (
-          <TableRow key={user.id}>
-            <TableCell>{user.username}</TableCell>
-            <TableCell>{user.email}</TableCell>
-          </TableRow>
-        ))}
-        </TableBody>
-      </Table>
-      
-    </div>
+    <Table>
+      <TableCaption>User table</TableCaption>
+      <TableHeader>
+        <TableRow>
+          <TableHead>id</TableHead>
+          <TableHead>username</TableHead>
+          <TableHead>email</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {data && data.map((user) => (
+        <TableRow key={user.id}>
+          <TableCell>{user.username}</TableCell>
+          <TableCell>{user.email}</TableCell>
+        </TableRow>
+      ))}
+      </TableBody>
+    </Table>
   )
 }
+
+// export async function getServerSideProps() {
+//   const data = await getUsers();
+//   return { props: { data } };
+// }
