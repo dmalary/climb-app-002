@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Link from "next/link"
 import { getUsers } from '@/utils/db';
 import {
   Card,
@@ -9,6 +10,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+
+// UPDATE WITH CAROUSEL COMPONENT FROM SHADCN
 
 export default function Stream() {
   const [streamData, setStreamData] = useState(0);
@@ -33,7 +36,7 @@ export default function Stream() {
         // how do i hide routes? based on auth?
         <Card key={user.id}>
           <CardHeader>
-            <a href={`/profile/${user.id}`}><CardTitle>{user.username}</CardTitle></a>
+            <Link href={`/profile/${user.id}`}><CardTitle>{user.username}</CardTitle></Link>
             <CardDescription>climb name (pulled from user climbs, most recent climb)</CardDescription>
           </CardHeader>
           <CardContent>

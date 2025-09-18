@@ -1,5 +1,5 @@
-import { Geist, Geist_Mono } from "next/font/google";
-import Stream from '../components/nav/stream.js'
+import Link from "next/link"
+import Stream from '../components/nav/stream.js';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -9,9 +9,13 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   NavigationMenuViewport,
-} from "@/components/ui/navigation-menu"
+  navigationMenuTriggerStyle
+} from "@/components/ui/navigation-menu";
+import { House, ChartNoAxesCombined, UserRoundPen } from 'lucide-react';
+import { Geist, Geist_Mono } from "next/font/google";
 
-// UPDATE WITH CAROUSEL COMPONENT FROM SHADCN
+
+// load shadcn skeletons on initial load while fecthing data?
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,13 +43,23 @@ export default function Home() {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuTrigger>Item One</NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <NavigationMenuLink>Link</NavigationMenuLink>
-              </NavigationMenuContent>
+              <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                <Link href='/'><House /></Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                <Link href='/'><ChartNoAxesCombined /></Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}> 
+                <Link href='/'><UserRoundPen /></Link>
+              </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
+        
         <Stream />
       </div>
     </div>
