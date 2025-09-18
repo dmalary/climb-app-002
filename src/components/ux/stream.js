@@ -14,24 +14,24 @@ import {
 // UPDATE WITH CAROUSEL COMPONENT FROM SHADCN
 
 export default function Stream() {
-  const [streamData, setStreamData] = useState(0);
+  const [data, setData] = useState(0);
 
   useEffect(() => {
     async function loadData() {
       try {
         const res = await getUsers();
-        setStreamData(res);
+        setData(res);
       } catch (err) {
         console.error("Error fetching data:", err);
       }
     }
     loadData();
   }, []);
-  if (streamData) console.log('streamData', streamData.length)
+  if (data) console.log('data', data.length)
 
   return (
     <>
-    {streamData && streamData.map((user) => (
+    {data && data.map((user) => (
         // set a href to /[userId] and pass id in params
         // how do i hide routes? based on auth?
         <Card key={user.id}>

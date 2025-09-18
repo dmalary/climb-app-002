@@ -1,17 +1,6 @@
 import Link from "next/link"
-import Stream from '../components/nav/stream.js';
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
-  navigationMenuTriggerStyle
-} from "@/components/ui/navigation-menu";
-import { House, ChartNoAxesCombined, UserRoundPen } from 'lucide-react';
+import Stream from '../components/ux/stream.js';
+import NavBar from '../components/ux/navBar.js';
 import { Geist, Geist_Mono } from "next/font/google";
 
 
@@ -40,26 +29,7 @@ export default function Home() {
   return (
     <div className="flex justify-center p-4 bg-stone-900 min-h-screen">
       <div className="w-full max-w-md space-y-6">
-        <NavigationMenu>
-          <NavigationMenuList>
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                <Link href='/'><House /></Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                <Link href='/'><ChartNoAxesCombined /></Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}> 
-                <Link href='/'><UserRoundPen /></Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
-        
+        <NavBar />
         <Stream />
       </div>
     </div>
