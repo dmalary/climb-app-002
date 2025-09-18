@@ -1,4 +1,3 @@
-import Link from "next/link"
 import Stream from '../components/ux/stream.js';
 import NavBar from '../components/ux/navBar.js';
 import { Geist, Geist_Mono } from "next/font/google";
@@ -26,6 +25,7 @@ const geistMono = Geist_Mono({
 
 // export default function Stream({ streamData }) {
 export default function Home() {
+
   return (
     <div className="flex justify-center p-4 bg-stone-900 min-h-screen">
       <div className="w-full max-w-md space-y-6">
