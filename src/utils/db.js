@@ -1,6 +1,7 @@
 export async function getUsers() {
   // const res = await fetch("/api/users"); 
   try {
+    // const res = await fetch("/api/users"); 
     const res = await fetch("/api/users"); 
 
     if (!res.ok) {
@@ -11,6 +12,21 @@ export async function getUsers() {
 
   } catch (err) {
     console.error("Error fetching session attempts:", err);
+    return null;
+  }
+}
+export async function getUser(id) {
+  try {
+    const res = await fetch(`/api/users/${id}`); 
+
+    // if (!res.ok) {
+    //   throw new Error(`Failed to fetch user: ${res.status}`);
+    // }
+
+    return await res.json();
+
+  } catch (err) {
+    console.error("Error fetching session user:", err);
     return null;
   }
 }
