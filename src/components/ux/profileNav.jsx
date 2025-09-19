@@ -10,9 +10,9 @@ import {
   NavigationMenuViewport,
   navigationMenuTriggerStyle
 } from "@/components/ui/navigation-menu";
-import { House, ChartNoAxesCombined, UserRoundPen } from 'lucide-react';
+import { House, ChartNoAxesCombined, Settings } from 'lucide-react';
 
-export default function Stream() {
+export default function ProfileNav() {
 
   return (
     <>
@@ -30,7 +30,7 @@ export default function Stream() {
           </NavigationMenuItem>
           <NavigationMenuItem>
             <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}> 
-              <Link href='/'><UserRoundPen /></Link>
+              <Link href='/'><Settings /></Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
         </NavigationMenuList>

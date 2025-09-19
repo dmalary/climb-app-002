@@ -1,8 +1,9 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { getUser, getUserSessions, } from '@/utils/db'
-import { Skeleton } from "@/components/ui/skeleton"
-import Grid from "@/components/ux/grid"
+import { getUser, getUserSessions, } from '@/utils/db';
+import { Skeleton } from "@/components/ui/skeleton";
+import ProfileNav from '@/components/ux/profileNav';
+import Grid from "@/components/ux/grid";
 
 export default function User() {
     const router = useRouter()
@@ -48,6 +49,7 @@ export default function User() {
         </div>
         ) : (
           <>
+            <ProfileNav />
             <div>{userData.username}</div>
             <Grid data={sessions} />
           </>

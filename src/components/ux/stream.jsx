@@ -1,6 +1,4 @@
-import { useEffect, useState } from 'react';
 import Link from "next/link"
-import { getUsers } from '@/utils/db';
 import {
   Card,
   CardAction,
@@ -10,39 +8,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
+
 
 // UPDATE WITH CAROUSEL COMPONENT FROM SHADCN
 
-export default function Stream() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState(0);
-
-  useEffect(() => {
-    async function loadData() {
-      try {
-        const res = await getUsers();
-        setData(res);
-        setIsLoading(false)
-      } catch (err) {
-        console.error("Error fetching data:", err);
-      }
-    }
-    loadData();
-  }, []);
-  if (data) console.log('data', data.length)
-
+export default function Stream({data}) {
   return (
     <>
-    {/* {data && data.map((user) => ( */}
-    {isLoading ? 
-    (
-    <div className="space-y-2">
-      <Skeleton className="h-8 w-[300px]" /> {/* Mimic title */}
-      <Skeleton className="h-4 w-[400px]" /> {/* Mimic description line 1 */}
-      <Skeleton className="h-4 w-[350px]" /> {/* Mimic description line 2 */}
-    </div>
-    ) : (data.map((user) => (
+    {data.map((user) => (
         // set a href to /[userId] and pass id in params
         // how do i hide routes? based on auth?
         <Card key={user.id}>
@@ -58,7 +31,7 @@ export default function Stream() {
             {/* <CardDescription><p>view comments?</p></CardDescription> */}
           </CardFooter>
         </Card>
-      )))}
+      ))}
     </>
   )
 }
