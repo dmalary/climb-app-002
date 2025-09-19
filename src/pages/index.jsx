@@ -1,5 +1,5 @@
-import Stream from '../components/ux/stream.js';
-import NavBar from '../components/ux/navBar.js';
+import Stream from '../components/ux/stream';
+import NavBar from '../components/ux/navBar';
 import { Geist, Geist_Mono } from "next/font/google";
 
 

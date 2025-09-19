@@ -1,23 +1,28 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { getUser } from '@/utils/db'
+import { getUser, getUserSessions, } from '@/utils/db'
 import { Skeleton } from "@/components/ui/skeleton"
+import Grid from "@/components/ux/grid"
 
 export default function User() {
     const router = useRouter()
-    const [data, setData] = useState(0);
+    const [userData, setUserData] = useState(0);
+    const [sessions, setSessionsData] = useState(0);
+    const [attempts, setAttemptsData] = useState(0);
+    const [attempt, setAttemptData] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
     const userId = router.query.userId;
-  
-    // console.log('router.query.slug', router.query.slug)
-
   
     useEffect(() => {
       async function loadData() {
         try {
-          const res = await getUser(userId);
-          // await setData(res);
-          setData(res);
+          const userRes = await getUser(userId);
+          // await setData(userRes);
+          setUserData(userRes);
+
+          const sessionsRes = await getUserSessions(userId);
+          setSessionsData(sessionsRes)
+
           setIsLoading(false)
         } catch (err) {
           console.error("Error fetching data:", err);
@@ -26,7 +31,10 @@ export default function User() {
       loadData();
     }, [userId]);
 
-    console.log('data', data)
+    console.log('userData', userData)
+    console.log('sessions', sessions)
+    // console.log('attempts', attempts)
+  
 
   return (
     <div>
@@ -38,7 +46,12 @@ export default function User() {
           <Skeleton className="h-4 w-[400px]" /> {/* Mimic description line 1 */}
           <Skeleton className="h-4 w-[350px]" /> {/* Mimic description line 2 */}
         </div>
-        ) : (data.username)
+        ) : (
+          <>
+            <div>{userData.username}</div>
+            <Grid data={sessions} />
+          </>
+        )
       }
     </div>
   )

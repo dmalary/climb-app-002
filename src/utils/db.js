@@ -33,7 +33,7 @@ export async function getUser(id) {
 
 export async function getUserSessions(userId){
   try {
-    const res = await fetch(`/api/user/sessions/${userId}`);
+    const res = await fetch(`/api/sessions/${userId}`);
 
     if (!res.ok) {
       throw new Error(`Failed to fetch attempts: ${res.status}`);
