@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-import Link from "next/link"
 import {
   Card,
   CardAction,
@@ -10,16 +8,17 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
-export default function Grid({data}) {
-  console.log('data', data)
+export default function Grid({ sessionData, sends }) {
+  console.log('sessionData', sessionData)
   return (
     <div className="grid grid-cols-3 gap-0">
-      {data.map((session) => (
+      {sessionData.map((session) => (
+
         <div key={session.id}>
         <Card >
           <CardHeader>
             {/* <Link href={`/profile/${session.id}`}> */}
-              <CardTitle>{session.length}(sends)count</CardTitle>
+              <CardTitle>{sends} sends</CardTitle>
             {/* </Link> */}
             <CardDescription>session date</CardDescription>
           </CardHeader>
