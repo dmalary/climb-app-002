@@ -1,5 +1,6 @@
 import {
   ClerkProvider,
+  SignIn,
   SignInButton,
   SignUpButton,
   SignedIn,
@@ -22,8 +23,8 @@ export default function App({ Component, pageProps }) {
       </SignedOut>
       <SignedIn>
         <UserButton />
+        <Component {...pageProps} />
       </SignedIn>
-      <Component {...pageProps} />
     </ClerkProvider>
   )
 }

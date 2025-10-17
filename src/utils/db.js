@@ -15,9 +15,15 @@ export async function getUsers() {
     return null;
   }
 }
-export async function getUser(id) {
+
+export async function getUser(id, token) {
   try {
-    const res = await fetch(`/api/users/${id}`); 
+    const res = await fetch(`/api/users/${id}`, { 
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    }); 
 
     // if (!res.ok) {
     //   throw new Error(`Failed to fetch user: ${res.status}`);
@@ -31,9 +37,14 @@ export async function getUser(id) {
   }
 }
 
-export async function getUserSessions(userId){
+export async function getUserSessions(userId, token){
   try {
-    const res = await fetch(`/api/sessions/${userId}`);
+    const res = await fetch(`/api/sessions/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    });
 
     if (!res.ok) {
       throw new Error(`Failed to fetch attempts: ${res.status}`);
@@ -47,9 +58,14 @@ export async function getUserSessions(userId){
   }
 }
 
-export async function getSessionClimbs(sessionID){
+export async function getSessionClimbs(sessionID, token){
   try {
-      const res = await fetch(`/api/session/${sessionID}`);
+      const res = await fetch(`/api/session/${sessionID}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    });
 
       if (!res.ok) {
       throw new Error(`Failed to fetch attempts: ${res.status}`);
@@ -63,9 +79,14 @@ export async function getSessionClimbs(sessionID){
   }
 }
 
-export async function getUserSends(userId){
+export async function getUserSends(userId, token){
   try {  
-    const res = await fetch(`/api/sends/${userId}`);
+    const res = await fetch(`/api/sends/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    });
     
     if (!res.ok) {
       throw new Error(`Failed to fetch attempts: ${res.status}`);
@@ -79,14 +100,13 @@ export async function getUserSends(userId){
   }
 }
 
-// export async function getHardestSend(userId){
-// }
+export async function getFollowingSends(userId){
+}
 
 export async function getFollowers(userId){ 
 }
 
 export async function getFollowing(userId){
-
 }
 
 export async function getClimberLeaderboard(climbId){
@@ -97,3 +117,6 @@ export async function getGymClimberLeaderboard(climbId){
 
 export async function getGymLeaderboard(climbId){
 }
+
+// export async function getHardestSend(userId){
+// }
