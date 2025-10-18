@@ -39,9 +39,10 @@ export async function getUser(id, token) {
 
 export async function getUserSessions(userId, token){
   try {
-    const res = await fetch(`/api/sessions/${userId}`, {
+    // const res = await fetch(`/api/sessions/${userId}`, {
+    const res = await fetch(`/api/sessions`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        // Authorization: `Bearer ${token}`,
         "Content-Type": "application/json"
       }
     });
