@@ -19,15 +19,8 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// export async function getServerSideProps() {
-//   const streamData = await getUsers(); // replace with /api/stream
-//   console.log('streamData', streamData)
-//   return { props: { streamData } };
-// }
-
 // when i log in and land on this page, i want my user data to load/update db, and update cached? data
 
-// export default function Stream({ streamData }) {
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(0); // this is data for the stream
@@ -38,23 +31,19 @@ export default function Home() {
   const { user } = useUser(); // user should already exist on this page
   // const { session } = useSession(); // JWT session token, will i need?
 
-  // console.log('user', user)
-  // console.log('userId', userId)
-  // console.log('session', session)
-
   useEffect(() => {
     async function loadFeed() {
       try {
         if (!userId) return;
 
         setIsLoading(true);
-        const token = await getToken();
+        // const token = await getToken();
 
         // const [mySessions, followingSessions] = await Promise.all([
         //   getUserSessions(user, token),
         //   getUserFollowSessions(user.id, token)
         // ]);
-        const [mySessions] = await Promise.all([getUserSessions(user, token)]);
+        const [mySessions] = await Promise.all([getUserSessions()]);
 
         // const feedData = [...mySessions , ...followingSessions]
         const feedData = [...(mySessions || [])]
@@ -72,7 +61,7 @@ export default function Home() {
     }
 
     loadFeed();
-  }, [userId, getToken()])
+  }, [userId])
 
   console.log('feed', feed)
   return (
@@ -87,19 +76,12 @@ export default function Home() {
         </div>
         ) : (
           <>
-          {/* <HomeNav id={id}/> */}
           <HomeNav id={userId}/>
           {/* <Stream data={data}/> */}
-          {/* <Stream data={feed}/> */}
+          <Stream data={feed}/>
           </>
         )}
       </div>
     </div>
   )
 }
-
-// export async function getServerSideProps() {
-//   const data = await getUsers(); // replace with /api/stream
-//   return { props: { data } };
-// }
-

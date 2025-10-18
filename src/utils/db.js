@@ -37,7 +37,7 @@ export async function getUser(id, token) {
   }
 }
 
-export async function getUserSessions(userId, token){
+export async function getUserSessions(){
   try {
     // const res = await fetch(`/api/sessions/${userId}`, {
     const res = await fetch(`/api/sessions`, {
