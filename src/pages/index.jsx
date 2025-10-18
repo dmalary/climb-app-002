@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
-import { getUsers } from '@/utils/db';
+import { useSession, useUser, useAuth, getToken } from '@clerk/nextjs'
+import { getUsers, getUserSessions } from '@/utils/db';
 import Stream from '@/components/ux/stream';
 import HomeNav from '@/components/ux/homeNav';
 import { Geist, Geist_Mono } from "next/font/google";
 import { Skeleton } from "@/components/ui/skeleton"
+import { getMainFeed } from "@/services/mainFeed"
 
 // load shadcn skeletons on initial load while fecthing data?
 
@@ -28,27 +30,51 @@ const geistMono = Geist_Mono({
 // export default function Stream({ streamData }) {
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState(0);
+  const [data, setData] = useState(0); // this is data for the stream
+  const [feed, setFeed] = useState(0); // this is data for the stream
+  const [error, setError] = useState(0);
+  
+  const { userId, getToken } = useAuth();
+  const { user } = useUser(); // user should already exist on this page
+  // const { session } = useSession(); // JWT session token, will i need?
+
+  // console.log('user', user)
+  // console.log('userId', userId)
+  // console.log('session', session)
 
   useEffect(() => {
-    async function loadData() {
+    async function loadFeed() {
       try {
-        const res = await getUsers();
-        setData(res);
-        setIsLoading(false)
+        if (!userId) return;
+
+        setIsLoading(true);
+        const token = await getToken();
+
+        // const [mySessions, followingSessions] = await Promise.all([
+        //   getUserSessions(user, token),
+        //   getUserFollowSessions(user.id, token)
+        // ]);
+        const [mySessions] = await Promise.all([getUserSessions(user, token)]);
+
+        // const feedData = [...mySessions , ...followingSessions]
+        const feedData = [...(mySessions || [])]
+        // .sort(
+        //   (a, b) => new Date(b.date) - new Date(a.date)
+        // );
+
+        setFeed(feedData);
       } catch (err) {
         console.error("Error fetching data:", err);
+        setError(err)
+      } finally {
+        setIsLoading(false)
       }
     }
-    loadData();
-  }, []);
-  if (data) console.log('data', data.length)
 
-  // CHANGE TO CURRENT LOGGED IN USER
-  // const id = process.env.CURRENT_USER;
-  const id = 'b58b68b1-8d5d-437e-a180-b5a0345e0c0a';
-  console.log('id', id)
+    loadFeed();
+  }, [userId, getToken()])
 
+  console.log('feed', feed)
   return (
     <div className="flex justify-center p-4 bg-stone-900 min-h-screen">
       <div className="w-full max-w-md space-y-6">
@@ -61,8 +87,10 @@ export default function Home() {
         </div>
         ) : (
           <>
-          <HomeNav id={id}/>
-          <Stream data={data}/>
+          {/* <HomeNav id={id}/> */}
+          <HomeNav id={userId}/>
+          {/* <Stream data={data}/> */}
+          {/* <Stream data={feed}/> */}
           </>
         )}
       </div>
