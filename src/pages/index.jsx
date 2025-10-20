@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useSession, useUser, useAuth, getToken } from '@clerk/nextjs'
 import { getUsers, getUserSessions } from '@/utils/db';
-import Stream from '@/components/ux/stream';
-import HomeNav from '@/components/ux/homeNav';
+import { getMainFeed } from "@/services/mainFeed"
 import { Geist, Geist_Mono } from "next/font/google";
 import { Skeleton } from "@/components/ui/skeleton"
-import { getMainFeed } from "@/services/mainFeed"
+import Stream from '@/components/ux/stream';
+import HomeNav from '@/components/ux/homeNav';
+import ImportBoard from '@/components/ux/importBoard';
 
 // load shadcn skeletons on initial load while fecthing data?
 
@@ -63,7 +64,7 @@ export default function Home() {
     loadFeed();
   }, [userId])
 
-  console.log('feed', feed)
+  // console.log('feed', feed)
   return (
     <div className="flex justify-center p-4 bg-stone-900 min-h-screen">
       <div className="w-full max-w-md space-y-6">
@@ -78,6 +79,7 @@ export default function Home() {
           <>
           <HomeNav id={userId}/>
           {/* <Stream data={data}/> */}
+          <ImportBoard />
           <Stream data={feed}/>
           </>
         )}
