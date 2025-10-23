@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { signIn, useSession } from "next-auth/react";
+import axios from "axios";
 import { BOARD_OPTIONS } from "@/utils/boardOptions";
 import {
   Card,
@@ -18,19 +20,29 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
-
 export default function ImportBoard() {
   const [boardVal, setBoardVal] = useState("");
   const [authChoice, setAuthChoice] = useState("");
   // console.log('boardVal', boardVal)
   console.log('authChoice', authChoice)
 
+  const { data: session } = useSession();
 
   function handleAuth(provider) {
     setAuthChoice(provider);
     console.log(`Auth method selected: ${provider} for ${boardVal}`);
     // later: send to backend or Python service
   }
+
+  async function handleImport() {
+  // Send Google token + board to backend
+  const res = await axios.post("/api/import-board", {
+    board: boardVal,
+    token: session?.accessToken
+  });
+
+  console.log("Import started:", res.data);
+}
 
   return (
     <>
