@@ -48,7 +48,8 @@ export async function getUserSessions(){
     });
 
     if (!res.ok) {
-      throw new Error(`Failed to fetch attempts: ${res.status}`);
+      throw new Error(`Failed to fetch attempts: ${res.status}`); 
+      // currently getting this error because i log in with a user not yet created. i need a check + error "oops looks like there's no user, please create account" or something like that
     }
 
     return await res.json();
