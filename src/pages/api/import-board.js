@@ -1,18 +1,27 @@
-import axios from 'axios';
+// pages/api/import-board.js
+import axios from "axios";
 
 export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
   try {
-    const { board, token } = req.body;
+    const { board, token, authProvider } = req.body;
 
     const response = await axios.post(
       `${process.env.EXPRESS_URL}/api-import-board`,
-      { board, token },
-      { headers: { Authorization: `Bearer ${req.headers["authorization"]}` }}
+      { board, token, authProvider },
+      {
+        headers: {
+          Authorization: req.headers["authorization"], // Pass through Clerk token
+        },
+      }
     );
 
-    res.status(200).json(response.data)
+    res.status(200).json(response.data);
   } catch (error) {
-    console.error("proxy server:", error.response?.data || error.message);
-    res.status(500).json({error: "import failed"});
+    console.error("Proxy error:", error.response?.data || error.message);
+    res.status(500).json({ error: "Import failed" });
   }
 }
