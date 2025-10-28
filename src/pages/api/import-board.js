@@ -10,7 +10,7 @@ export default async function handler(req, res) {
     const { board, token, authProvider } = req.body;
 
     const response = await axios.post(
-      `${process.env.EXPRESS_URL}/api-import-board`,
+      `${process.env.EXPRESS_URL}/api/import-board`,
       { board, token, authProvider },
       {
         headers: {
