@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useSession, useUser, useAuth, getToken } from '@clerk/nextjs'
+// import { useSession, useUser, useAuth, getToken } from '@clerk/nextjs'
+import { useUser, useAuth } from '@clerk/nextjs'
 import { getUsers, getUserSessions } from '@/utils/db';
 import { getMainFeed } from "@/services/mainFeed"
 import { Geist, Geist_Mono } from "next/font/google";
@@ -28,7 +29,7 @@ export default function Home() {
   const [feed, setFeed] = useState(0); // this is data for the stream
   const [error, setError] = useState(0);
   
-  const { userId, getToken } = useAuth();
+  const { userId, getToken, isSignedIn } = useAuth();
   const { user } = useUser(); // user should already exist on this page
   // const { session } = useSession(); // JWT session token, will i need?
 

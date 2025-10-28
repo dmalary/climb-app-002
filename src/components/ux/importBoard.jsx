@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
-import { useUser, useAuth, getToken } from "@clerk/nextjs";
+// import { useUser, useAuth, getToken } from "@clerk/nextjs";
+import { useUser, useAuth } from "@clerk/nextjs";
 import { BOARD_OPTIONS } from "@/utils/boardOptions";
 import {
   Card,
@@ -22,7 +23,7 @@ export default function ImportBoard() {
   const [boardVal, setBoardVal] = useState("");
   const [authChoice, setAuthChoice] = useState("");
   const { user } = useUser();
-  const { isSignedIn } = useAuth();
+  const { isSignedIn, getToken } = useAuth();
 
   const handleAuth = (provider) => {
     setAuthChoice(provider);
