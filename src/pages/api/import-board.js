@@ -6,11 +6,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { board, token, authProvider } = req.body;
+    const { board, token, username, password, authProvider } = req.body;
 
     const response = await axios.post(
       `${process.env.EXPRESS_URL}/api/import-board`,
-      { board, token, authProvider },
+      { board, token, username, password, authProvider },
       {
         headers: {
           Authorization: req.headers["authorization"], // Pass through Clerk token

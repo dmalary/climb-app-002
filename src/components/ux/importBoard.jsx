@@ -18,9 +18,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+  FieldSet,
+} from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
 
 export default function ImportBoard() {
   const [boardVal, setBoardVal] = useState("");
+  const [userVal, setUserVal] = useState("");
+  const [passVal, setPassVal] = useState("");
   const [authChoice, setAuthChoice] = useState("");
   const { user } = useUser();
   const { isSignedIn, getToken } = useAuth();
@@ -43,6 +53,8 @@ export default function ImportBoard() {
 
       const res = await axios.post("/api/import-board", {
         board: boardVal,
+        username: userVal, 
+        password: passVal,
         authProvider: authChoice,
       }, {
         headers: {
@@ -59,6 +71,7 @@ export default function ImportBoard() {
   };
 
   return (
+    <>
     <Card>
       <CardHeader>
         <CardTitle>Import boards</CardTitle>
@@ -101,11 +114,26 @@ export default function ImportBoard() {
       {/* CONFIRM SELECTION */}
       {authChoice && (
         <CardFooter>
+          <div className="w-full max-w-md">
+          <FieldSet>
+            <FieldGroup>
+              <Field>
+                <FieldLabel htmlFor="username">Username</FieldLabel>
+                <Input id="username" type="text" placeholder="Max Leiter" onChange={(e) => setUserVal(e.target.value)} />
+              </Field>
+              <Field>
+                <FieldLabel htmlFor="password">Password</FieldLabel>
+                <Input id="password" type="password" placeholder="••••••••" onChange={(e) => setPassVal(e.target.value)} />
+              </Field>
+            </FieldGroup>
+          </FieldSet>
+          </div>
           <Button className="w-full" onClick={handleImport}>
             Import {boardVal} data
           </Button>
         </CardFooter>
       )}
     </Card>
+    </>
   );
 }
