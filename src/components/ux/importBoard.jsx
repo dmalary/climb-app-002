@@ -38,7 +38,8 @@ export default function ImportBoard() {
 
     try {
       // Get Clerk JWT
-      const token = await getToken({ template: "supabase" });
+      const token = await getToken({ template: "supabase" }); 
+      // console.log(token);
 
       const res = await axios.post("/api/import-board", {
         board: boardVal,
@@ -72,7 +73,7 @@ export default function ImportBoard() {
           </SelectTrigger>
           <SelectContent>
             {BOARD_OPTIONS.map((board) => (
-              <SelectItem key={board.label} value={board.label}>
+              <SelectItem key={board.label} value={board.lib}>
                 {board.label}
               </SelectItem>
             ))}
