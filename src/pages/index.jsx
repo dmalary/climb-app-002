@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import Stream from '@/components/ux/stream';
 import HomeNav from '@/components/ux/homeNav';
 import ImportBoard from '@/components/ux/importBoard';
+import SyncPublic from '@/components/ux/syncPublic';
 
 // load shadcn skeletons on initial load while fecthing data?
 
@@ -81,6 +82,7 @@ export default function Home() {
           <HomeNav id={userId}/>
           {/* <Stream data={data}/> */}
           <ImportBoard />
+          <SyncPublic />
           <Stream data={feed}/>
           </>
         )}
