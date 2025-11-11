@@ -12,6 +12,11 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Missing board name" });
     }
 
+    // // TEST
+    // console.log("Next API hit: /api/sync-public");
+    // console.log("→ Express URL:", process.env.EXPRESS_URL);
+    // console.log("→ Payload:", req.body);
+
     // Proxy the request to your Express backend
     const response = await axios.post(
       `${process.env.EXPRESS_URL}/api/sync-public`,
