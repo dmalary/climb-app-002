@@ -7,9 +7,10 @@ export default async function handler(req, res) {
 
   try {
     const { board, token, username, password, authProvider } = req.body;
+    // const { board, username, password, authProvider } = req.body;
 
     const response = await axios.post(
-      `${process.env.EXPRESS_URL}/api/import-board`,
+      `${process.env.EXPRESS_URL}/api/import-user-board-data`,
       { board, token, username, password, authProvider },
       {
         headers: {
@@ -18,9 +19,35 @@ export default async function handler(req, res) {
       }
     );
 
+    // ✅ Capture both Clerk and Supabase tokens if available
+    // const clerkToken = req.headers["authorization"];
+    // const supabaseToken = req.headers["x-supabase-auth"]; // optional custom header
+
+    // // ✅ Forward both to the Express API
+    // const response = await axios.post(
+    //   `${process.env.EXPRESS_URL}/api/import-board`,
+    //   {
+    //     board,
+    //     username,
+    //     password,
+    //     authProvider,
+    //   },
+    //   {
+    //     headers: {
+    //       Authorization: clerkToken, // Clerk JWT for Express middleware
+    //       "x-supabase-auth": supabaseToken, // Optional for Python user data
+    //       "Content-Type": "application/json",
+    //     },
+    //   }
+    // );
+
     res.status(200).json(response.data);
   } catch (error) {
     console.error("Proxy error:", error.response?.data || error.message);
-    res.status(500).json({ error: "Import failed" });
+
+    return res.status(error.response?.status || 500).json({
+      error: "Import failed",
+      details: error.response?.data || error.message,
+    });
   }
 }

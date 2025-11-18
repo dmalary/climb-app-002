@@ -51,7 +51,7 @@ export default function ImportBoard() {
       const token = await getToken({ template: "supabase" }); 
       // console.log(token);
 
-      const res = await axios.post("/api/import-board", {
+      const res = await axios.post("/api/import-user-board-data", {
         board: boardVal,
         username: userVal, 
         password: passVal,
@@ -63,7 +63,7 @@ export default function ImportBoard() {
       });
 
       console.log("Import started:", res.data);
-      alert(`Import started for ${boardVal}`);
+      console.log(`Import started for ${boardVal}`);
     } catch (err) {
       console.error("Import failed:", err);
       alert("Error importing board data. Check console for details.");
