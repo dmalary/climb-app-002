@@ -45,6 +45,7 @@ export default function SyncBoard() {
 
   return (
     <Card>
+      <div className="w-full max-w-2xl mx-auto">
       <CardHeader>
         <CardTitle>Sync boards</CardTitle>
         <CardDescription>Select from the dropdown</CardDescription>
@@ -94,6 +95,7 @@ export default function SyncBoard() {
           </p>
         )}
       </CardFooter>
+      </div>
     </Card>
   );
 }

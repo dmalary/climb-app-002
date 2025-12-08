@@ -69,7 +69,7 @@ export default function Home() {
   // console.log('feed', feed)
   return (
     <div className="flex justify-center p-4 bg-stone-900 min-h-screen">
-      <div className="w-full max-w-md space-y-6">
+      <div className="w-full max-w-lg mx-auto space-y-6">
         {isLoading ? 
         (
         <div className="space-y-2">

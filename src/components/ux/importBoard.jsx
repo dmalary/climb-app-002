@@ -74,7 +74,7 @@ export default function ImportBoard() {
     <>
     <Card>
       <CardHeader>
-        <CardTitle>Import boards</CardTitle>
+        <CardTitle>Import user board data</CardTitle>
         <CardDescription>Select from the dropdown</CardDescription>
       </CardHeader>
 
@@ -101,10 +101,10 @@ export default function ImportBoard() {
             Authenticate your board account to import your climbs
           </p>
           <div className="flex gap-3">
-            <Button variant="outline" onClick={() => handleAuth("google")}>
+            <Button className="bg-sky-500 hover:bg-sky-700" variant="outline" onClick={() => handleAuth("google")}>
               Google
             </Button>
-            <Button variant="outline" onClick={() => handleAuth("apple")}>
+            <Button className="bg-sky-500 hover:bg-sky-700" variant="outline" onClick={() => handleAuth("apple")}>
               Apple
             </Button>
           </div>
@@ -113,24 +113,26 @@ export default function ImportBoard() {
 
       {/* CONFIRM SELECTION */}
       {authChoice && (
-        <CardFooter>
-          <div className="w-full max-w-md">
-          <FieldSet>
-            <FieldGroup>
-              <Field>
+        <CardFooter className="w-full">
+          {/* <div className="w-full "> */}
+          <div className="w-full max-w-2xl mx-auto">
+          <FieldSet className="w-full">
+            <FieldGroup className="w-full">
+              <Field className="w-full">
                 <FieldLabel htmlFor="username">Username</FieldLabel>
-                <Input id="username" type="text" placeholder="Max Leiter" onChange={(e) => setUserVal(e.target.value)} />
+                <Input id="username" type="text" placeholder="Max Leiter" onChange={(e) => setUserVal(e.target.value)} className="w-full"/>
               </Field>
-              <Field>
+              <Field className="w-full">
                 <FieldLabel htmlFor="password">Password</FieldLabel>
-                <Input id="password" type="password" placeholder="••••••••" onChange={(e) => setPassVal(e.target.value)} />
+                <Input id="password" type="password" placeholder="••••••••" onChange={(e) => setPassVal(e.target.value)} className="w-full"/>
               </Field>
             </FieldGroup>
           </FieldSet>
-          </div>
+          
           <Button className="w-full" onClick={handleImport}>
             Import {boardVal} data
           </Button>
+          </div>
         </CardFooter>
       )}
     </Card>
