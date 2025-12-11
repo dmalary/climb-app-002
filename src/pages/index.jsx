@@ -133,7 +133,7 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center p-4 bg-stone-900 min-h-screen">
+      <div className="flex justify-center bg-stone-900 min-h-screen">
         <div className="w-full max-w-lg mx-auto space-y-6">
           <Skeleton className="h-8 w-[300px]" />
           <Skeleton className="h-4 w-[400px]" />
@@ -144,7 +144,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex justify-center p-4 bg-stone-900 min-h-screen">
+    <div className="flex justify-center bg-stone-900 min-h-screen">
       <div className="w-full max-w-lg mx-auto space-y-6">
         <DynamicNav type="home" userId={user.id} />
         <ImportBoard />

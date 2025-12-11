@@ -24,6 +24,10 @@ export const navConfig = {
       href: `/profile/${id}`,
       icon: <UserRoundPen className="w-5 h-5" />,
     },
+    {
+      href: "/settings",
+      icon: <Settings className="w-5 h-5" />,
+    },
   ],
 
   profile: () => [
@@ -41,7 +45,7 @@ export const navConfig = {
     },
   ],
 
-  analytics: () => [
+  analytics: (id) => [
     {
       href: "/",
       icon: <House className="w-5 h-5" />,
@@ -61,8 +65,18 @@ export const navConfig = {
 // DYNAMIC NAV COMPONENT
 // ---------------------------------------------
 export default function DynamicNav({ type = "home", userId }) {
-  const items =
-    type === "home" ? navConfig.home(userId) : navConfig.profile();
+  const items = (() => {
+    switch (type) {
+      case "home":
+        return navConfig.home(userId);
+      case "profile":
+        return navConfig.profile(userId);
+      case "analytics":
+        return navConfig.analytics(userId);
+      default:
+        return navConfig.home(userId);
+    }
+  })();
 
   return (
     <NavigationMenu>

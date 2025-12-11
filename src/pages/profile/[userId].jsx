@@ -1,12 +1,17 @@
+"use client";
+
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useAuth } from "@clerk/nextjs";
 import { getUser, getUserSessions } from "@/utils/db";
 import { Skeleton } from "@/components/ui/skeleton";
 import DynamicNav from '@/components/ux/dynamicNav';
 import Grid from "@/components/ux/grid";
+import Stream from '@/components/ux/stream';
 
 export default function User() {
   const router = useRouter();
+  const { getToken, isSignedIn } = useAuth();
   const userId = router.query.userId;
 
   const [userData, setUserData] = useState(null);
@@ -18,6 +23,9 @@ export default function User() {
 
     async function loadData() {
       try {
+        // if (!userId || !isSignedIn) return;
+
+        // const token = await getToken();
         const userRes = await getUser(userId);
         setUserData(userRes);
 
@@ -36,7 +44,7 @@ export default function User() {
 
   if (isLoading) {
     return (
-      <div className="p-4 space-y-6">
+      <div className="space-y-6">
         <Skeleton className="h-10 w-40 rounded-md" />
         <Skeleton className="h-6 w-32" />
         <div className="grid grid-cols-2 gap-4 mt-4">
@@ -56,12 +64,12 @@ export default function User() {
   //     </div>
   //   );
   // }
-  console.log('userData', userData) // currently returning null FIX!
+  // console.log('userData', userData) // currently returning null FIX!
 
   const sends = 4; // temp placeholder from your logic
 
   return (
-    <div className="p-4 space-y-6">
+    <div className="space-y-6">
       {/* Top Nav */}
       <DynamicNav type="profile" userId={userId} />
 
@@ -81,7 +89,8 @@ export default function User() {
       </div>
 
       {/* Grid (your stats + charts) */}
-      <Grid sessionData={sessions} sends={sends} />
+      {/* <Grid sessionData={sessions} sends={sends} /> */}
+      <Stream sessionData={sessions} attempts={sends} />
     </div>
   );
 }
