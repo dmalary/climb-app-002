@@ -18,26 +18,33 @@ export default function User() {
   const [sessions, setSessions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    if (!userId) return;
+  const [feed, setFeed] = useState(0); // this is data for the stream
 
+  useEffect(() => {
     async function loadData() {
       try {
+        if (!userId) return;
         // if (!userId || !isSignedIn) return;
 
+        setIsLoading(true);
         // const token = await getToken();
-        const userRes = await getUser(userId);
-        setUserData(userRes);
+        // const userRes = await getUser(userId);
+        // setUserData(userRes);
 
         const sessionsRes = await getUserSessions(userId);
         setSessions(sessionsRes);
+        // const sessionsRes = await Promise.all([getUserSessions(userId)]);
+        // setSessions([...(sessionsRes || [])]);
 
         setIsLoading(false);
       } catch (err) {
         console.error("Error fetching data:", err);
-        setIsLoading(false);
+        setError(err)
+      } finally {
+        setIsLoading(false)
       }
     }
+
 
     loadData();
   }, [userId]);
@@ -76,11 +83,13 @@ export default function User() {
       {/* User Header */}
       <div className="flex items-center gap-4 mt-4">
         <div className="h-14 w-14 rounded-full bg-stone-700 flex items-center justify-center text-white text-lg font-semibold">
-          {userData?.username?.[0]?.toUpperCase() || "U"}
+          {/* {userData?.username?.[0]?.toUpperCase() || "U"} */}
+          {"U"}
         </div>
         <div>
           <h1 className="text-xl font-semibold text-stone-100">
-            {userData?.username || "User"}
+            {/* {userData?.username || "User"} */}
+            {"User"}
           </h1>
           <p className="text-sm text-stone-400">
             {sessions?.length || 0} sessions logged

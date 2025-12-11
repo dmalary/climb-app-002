@@ -7,7 +7,7 @@ import SendAttemptBar from "@/components/charts/SendAttemptBar";
 import GradeDistributionBar from "@/components/charts/GradeDistributionBar";
 import SessionSummaryPie from "@/components/charts/SessionSummaryPie";
 
-import { getSessionAttempts } from "@/utils/db";
+import { getUserSessionAttempts } from "@/utils/db";
 import { cleanAttempts } from "@/utils/analytics/getAttempts";
 import { getGradeHistogram } from "@/utils/analytics/getGrades";
 import { getSessionBreakdown, getAttemptVsSendCounts } from "@/utils/analytics/getSummaries";
@@ -21,7 +21,7 @@ export default function Dashboard({ sessionId, token }) {
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-      const rawAttempts = await getSessionAttempts(sessionId, token);
+      const rawAttempts = await getUserSessionAttempts(sessionId, token);
 
       if (!rawAttempts) {
         setLoading(false);

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 // import { useSession, useUser, useAuth, getToken } from '@clerk/nextjs'
 import { useUser, useAuth } from '@clerk/nextjs'
-import { getUsers, getUserSessions } from '@/utils/db';
+import { getUsers, getUserSessions, getAllSessions, getUserAttempts, getAllAttempts } from '@/utils/db';
 import { getMainFeed } from "@/services/mainFeed"
 import { Geist, Geist_Mono } from "next/font/google";
 import { Skeleton } from "@/components/ui/skeleton"
@@ -56,9 +56,11 @@ export default function Home() {
         //   getUserFollowSessions(user.id, token)
         // ]);
         const [mySessions] = await Promise.all([getUserSessions()]);
+        const [allSessions] = await Promise.all([getAllSessions()]);
 
         // const feedData = [...mySessions , ...followingSessions]
-        const feedData = [...(mySessions || [])]
+        // const feedData = [...(mySessions || [])]
+        const feedData = [...(allSessions || [])]
         // .sort(
         //   (a, b) => new Date(b.date) - new Date(a.date)
         // );
@@ -103,7 +105,7 @@ export default function Home() {
   }, [userId, getToken]);
 
   // console.log('feed', feed)
-  feed && console.log(feed.slice(0,3))
+  // feed && console.log(feed.slice(0,3))
   // return (
   //   <div className="flex justify-center p-4 bg-stone-900 min-h-screen">
   //     <div className="w-full max-w-lg mx-auto space-y-6">
