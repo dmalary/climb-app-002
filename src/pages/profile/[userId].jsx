@@ -1,60 +1,87 @@
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { getUser, getUserSessions, } from '@/utils/db';
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { getUser, getUserSessions } from "@/utils/db";
 import { Skeleton } from "@/components/ui/skeleton";
-import ProfileNav from '@/components/ux/profileNav';
+import DynamicNav from '@/components/ux/dynamicNav';
 import Grid from "@/components/ux/grid";
 
 export default function User() {
-    const router = useRouter()
-    const [userData, setUserData] = useState(0);
-    const [sessions, setSessionsData] = useState(0);
-    const [attempts, setAttemptsData] = useState(0);
-    const [attempt, setAttemptData] = useState(0);
-    const [isLoading, setIsLoading] = useState(true);
-    const userId = router.query.userId;
-  
-    useEffect(() => {
-      async function loadData() {
-        try {
-          const userRes = await getUser(userId);
-          // await setData(userRes);
-          setUserData(userRes);
+  const router = useRouter();
+  const userId = router.query.userId;
 
-          const sessionsRes = await getUserSessions(userId);
-          setSessionsData(sessionsRes)
+  const [userData, setUserData] = useState(null);
+  const [sessions, setSessions] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-          setIsLoading(false)
-        } catch (err) {
-          console.error("Error fetching data:", err);
-        }
+  useEffect(() => {
+    if (!userId) return;
+
+    async function loadData() {
+      try {
+        const userRes = await getUser(userId);
+        setUserData(userRes);
+
+        const sessionsRes = await getUserSessions(userId);
+        setSessions(sessionsRes);
+
+        setIsLoading(false);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setIsLoading(false);
       }
-      loadData();
-    }, [userId]);
+    }
 
-    console.log('userData', userData)
-    console.log('sessions', sessions)
-    // console.log('attempts', attempts)
-  
+    loadData();
+  }, [userId]);
+
+  if (isLoading) {
+    return (
+      <div className="p-4 space-y-6">
+        <Skeleton className="h-10 w-40 rounded-md" />
+        <Skeleton className="h-6 w-32" />
+        <div className="grid grid-cols-2 gap-4 mt-4">
+          <Skeleton className="h-24 w-full rounded-xl" />
+          <Skeleton className="h-24 w-full rounded-xl" />
+          <Skeleton className="h-24 w-full rounded-xl" />
+          <Skeleton className="h-24 w-full rounded-xl" />
+        </div>
+      </div>
+    );
+  }
+
+  // if (!userData) {
+  //   return (
+  //     <div className="text-center text-stone-300 p-6">
+  //       Could not load user profile.
+  //     </div>
+  //   );
+  // }
+  console.log('userData', userData) // currently returning null FIX!
+
+  const sends = 4; // temp placeholder from your logic
 
   return (
-    <div>
-      {/* {data && data.username} */}
-      {isLoading ? 
-        (
-        <div className="space-y-2">
-          <Skeleton className="h-8 w-[300px]" /> {/* Mimic title */}
-          <Skeleton className="h-4 w-[400px]" /> {/* Mimic description line 1 */}
-          <Skeleton className="h-4 w-[350px]" /> {/* Mimic description line 2 */}
+    <div className="p-4 space-y-6">
+      {/* Top Nav */}
+      <DynamicNav type="profile" userId={userId} />
+
+      {/* User Header */}
+      <div className="flex items-center gap-4 mt-4">
+        <div className="h-14 w-14 rounded-full bg-stone-700 flex items-center justify-center text-white text-lg font-semibold">
+          {userData?.username?.[0]?.toUpperCase() || "U"}
         </div>
-        ) : (
-          <>
-            <ProfileNav />
-            <div>{userData.username}</div>
-            <Grid data={sessions} />
-          </>
-        )
-      }
+        <div>
+          <h1 className="text-xl font-semibold text-stone-100">
+            {userData?.username || "User"}
+          </h1>
+          <p className="text-sm text-stone-400">
+            {sessions?.length || 0} sessions logged
+          </p>
+        </div>
+      </div>
+
+      {/* Grid (your stats + charts) */}
+      <Grid sessionData={sessions} sends={sends} />
     </div>
-  )
+  );
 }

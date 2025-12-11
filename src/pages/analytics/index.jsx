@@ -1,17 +1,12 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-// import { useSession, useUser, useAuth, getToken } from '@clerk/nextjs'
 import { useUser, useAuth } from '@clerk/nextjs'
 import { getUsers, getUserSessions } from '@/utils/db';
-import { getMainFeed } from "@/services/mainFeed"
 import { Geist, Geist_Mono } from "next/font/google";
 import { Skeleton } from "@/components/ui/skeleton"
-import Stream from '@/components/ux/stream';
-import DynamicNav from '@/components/ux/dynamicNav';
-import ImportBoard from '@/components/ux/importBoard';
-import SyncPublic from '@/components/ux/syncPublic';
 import Dashboard from '@/components/ux/dashboard';
+import DynamicNav from '@/components/ux/dynamicNav';
 
 // load shadcn skeletons on initial load while fecthing data?
 
@@ -25,21 +20,19 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// when i log in and land on this page, i want my user data to load/update db, and update cached? data
-
 export default function Home() {
   const { userId, getToken, isSignedIn } = useAuth();
-  const { user } = useUser(); // user should already exist on this page
+  // const { user } = useUser(); // user should already exist on this page
 
   const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState(0); // this is data for the stream
+  // const [data, setData] = useState(0); // this is data for the stream
   const [feed, setFeed] = useState(0); // this is data for the stream
 
   const [sessions, setSessions] = useState([]);
   const [selectedSession, setSelectedSession] = useState(null);
   const [token, setToken] = useState(null);
 
-  const [error, setError] = useState(0);
+  // const [error, setError] = useState(0);
   
   // const { session } = useSession(); // JWT session token, will i need?
 
@@ -51,17 +44,10 @@ export default function Home() {
         setIsLoading(true);
         // const token = await getToken();
 
-        // const [mySessions, followingSessions] = await Promise.all([
-        //   getUserSessions(user, token),
-        //   getUserFollowSessions(user.id, token)
-        // ]);
         const [mySessions] = await Promise.all([getUserSessions()]);
 
-        // const feedData = [...mySessions , ...followingSessions]
         const feedData = [...(mySessions || [])]
-        // .sort(
-        //   (a, b) => new Date(b.date) - new Date(a.date)
-        // );
+
 
         setFeed(feedData);
       } catch (err) {
@@ -104,32 +90,6 @@ export default function Home() {
 
   // console.log('feed', feed)
   feed && console.log(feed.slice(0,3))
-  // return (
-  //   <div className="flex justify-center p-4 bg-stone-900 min-h-screen">
-  //     <div className="w-full max-w-lg mx-auto space-y-6">
-  //       {isLoading ? 
-  //       (
-  //       <div className="space-y-2">
-  //         <Skeleton className="h-8 w-[300px]" /> {/* Mimic title */}
-  //         <Skeleton className="h-4 w-[400px]" /> {/* Mimic description line 1 */}
-  //         <Skeleton className="h-4 w-[350px]" /> {/* Mimic description line 2 */}
-  //       </div>
-  //       ) : (
-  //         <>
-  //         <HomeNav id={userId}/>
-  //         {/* <Stream data={data}/> */}
-  //         <ImportBoard />
-  //         <SyncPublic />
-  //         <div>sessions: {feed.length}</div>
-  //         {/* <Stream data={feed}/> */}
-  //         {/* // add dropdown of session id's and board and pass down to dashboard */}
-  //         <Dashboard sessionId={sessionId} token={token} />;
-  //         </>
-  //       )}
-  //     </div>
-  //   </div>
-  // )
-
 
   if (isLoading) {
     return (
@@ -146,13 +106,31 @@ export default function Home() {
   return (
     <div className="flex justify-center p-4 bg-stone-900 min-h-screen">
       <div className="w-full max-w-lg mx-auto space-y-6">
-        <DynamicNav type="home" userId={user.id} />
-        <ImportBoard />
-        <SyncPublic />
-
+        <DynamicNav type="analytics" userId={userId} />
         {/* {error && <div className="text-red-500">Error loading sessions</div>} */}
-        <Stream sessionData={feed} attempts={5} />
 
+        <div className="flex flex-col gap-2">
+          <label htmlFor="sessionSelect" className="text-white font-semibold">
+            Select Session
+          </label>
+          <select
+            id="sessionSelect"
+            className="p-2 rounded bg-stone-800 text-white"
+            value={selectedSession || ""}
+            onChange={(e) => setSelectedSession(e.target.value)}
+          >
+            {sessions.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.board} – {new Date(s.date).toLocaleDateString()}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Dashboard */}
+        {selectedSession && token && (
+          <Dashboard sessionId={selectedSession} token={token} />
+        )}
       </div>
     </div>
   );
