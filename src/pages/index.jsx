@@ -11,7 +11,6 @@ import Stream from '@/components/ux/stream';
 import DynamicNav from '@/components/ux/dynamicNav';
 import ImportBoard from '@/components/ux/importBoard';
 import SyncPublic from '@/components/ux/syncPublic';
-import Dashboard from '@/components/ux/dashboard';
 
 // load shadcn skeletons on initial load while fecthing data?
 
@@ -30,17 +29,11 @@ const geistMono = Geist_Mono({
 export default function Home() {
   const { userId, getToken, isSignedIn } = useAuth();
   const { user } = useUser(); // user should already exist on this page
-
-  const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState(0); // this is data for the stream
-  const [feed, setFeed] = useState(0); // this is data for the stream
-
-  const [sessions, setSessions] = useState([]);
-  const [selectedSession, setSelectedSession] = useState(null);
   const [token, setToken] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(0);
   
+  const [sessions, setSessions] = useState([]);
   // const { session } = useSession(); // JWT session token, will i need?
 
   useEffect(() => {
@@ -49,7 +42,8 @@ export default function Home() {
         if (!userId) return;
 
         setIsLoading(true);
-        // const token = await getToken();
+        const t = await getToken();
+        setToken(t);
 
         // const [mySessions, followingSessions] = await Promise.all([
         //   getUserSessions(user, token),
@@ -60,12 +54,12 @@ export default function Home() {
 
         // const feedData = [...mySessions , ...followingSessions]
         // const feedData = [...(mySessions || [])]
-        const feedData = [...(allSessions || [])]
+        const sessionData = [...(allSessions || [])]
         // .sort(
         //   (a, b) => new Date(b.date) - new Date(a.date)
         // );
 
-        setFeed(feedData);
+        setSessions(sessionData);
       } catch (err) {
         console.error("Error fetching data:", err);
         setError(err)
@@ -76,62 +70,6 @@ export default function Home() {
 
     loadFeed();
   }, [userId])
-
-   // Load user sessions
-  useEffect(() => {
-    async function loadSessions() {
-      if (!userId) return;
-      setIsLoading(true);
-
-      try {
-        const t = await getToken({ template: "supabase" });
-        setToken(t);
-
-        const userSessions = await getUserSessions(userId, t);
-        setSessions(userSessions || []);
-
-        if (userSessions && userSessions.length > 0) {
-          setSelectedSession(userSessions[0].id); // default selection
-        }
-      } catch (err) {
-        console.error("Error loading sessions:", err);
-        setError(err);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    loadSessions();
-  }, [userId, getToken]);
-
-  // console.log('feed', feed)
-  // feed && console.log(feed.slice(0,3))
-  // return (
-  //   <div className="flex justify-center p-4 bg-stone-900 min-h-screen">
-  //     <div className="w-full max-w-lg mx-auto space-y-6">
-  //       {isLoading ? 
-  //       (
-  //       <div className="space-y-2">
-  //         <Skeleton className="h-8 w-[300px]" /> {/* Mimic title */}
-  //         <Skeleton className="h-4 w-[400px]" /> {/* Mimic description line 1 */}
-  //         <Skeleton className="h-4 w-[350px]" /> {/* Mimic description line 2 */}
-  //       </div>
-  //       ) : (
-  //         <>
-  //         <HomeNav id={userId}/>
-  //         {/* <Stream data={data}/> */}
-  //         <ImportBoard />
-  //         <SyncPublic />
-  //         <div>sessions: {feed.length}</div>
-  //         {/* <Stream data={feed}/> */}
-  //         {/* // add dropdown of session id's and board and pass down to dashboard */}
-  //         <Dashboard sessionId={sessionId} token={token} />;
-  //         </>
-  //       )}
-  //     </div>
-  //   </div>
-  // )
-
 
   if (isLoading) {
     return (
@@ -153,7 +91,8 @@ export default function Home() {
         <SyncPublic />
 
         {/* {error && <div className="text-red-500">Error loading sessions</div>} */}
-        <Stream sessionData={feed} attempts={5} />
+
+        <Stream sessionData={sessions} token={token} />
 
       </div>
     </div>

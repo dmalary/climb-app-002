@@ -12,8 +12,8 @@ import Stream from '@/components/ux/stream';
 export default function User() {
   const router = useRouter();
   const { getToken, isSignedIn } = useAuth();
+  const [token, setToken] = useState(null);
   const userId = router.query.userId;
-
   const [userData, setUserData] = useState(null);
   const [sessions, setSessions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -27,7 +27,8 @@ export default function User() {
         // if (!userId || !isSignedIn) return;
 
         setIsLoading(true);
-        // const token = await getToken();
+        const t = await getToken();
+        setToken(t)
         // const userRes = await getUser(userId);
         // setUserData(userRes);
 
@@ -98,8 +99,7 @@ export default function User() {
       </div>
 
       {/* Grid (your stats + charts) */}
-      {/* <Grid sessionData={sessions} sends={sends} /> */}
-      <Stream sessionData={sessions} attempts={sends} />
+      <Stream sessionData={sessions} token={token} />
     </div>
   );
 }
