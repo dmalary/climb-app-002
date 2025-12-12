@@ -4,13 +4,11 @@ import { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 import SendAttemptBar from "@/components/charts/SendAttemptBar";
-import GradeDistributionBar from "@/components/charts/GradeDistributionBar";
+import {GradeDistributionBar} from "@/components/charts/GradeDistributionBar";
 import SessionSummaryPie from "@/components/charts/SessionSummaryPie";
 
 import { getUserSessionAttempts, getSessionAttempts } from "@/utils/db";
-import { cleanAttempts } from "@/utils/analytics/getAttempts";
-import { getGradeHistogram } from "@/utils/analytics/getGrades";
-import { getSessionBreakdown, getAttemptVsSendCounts } from "@/utils/analytics/getSummaries";
+import { cleanAttempts, getGradeHistogram, getSessionBreakdown, getAttemptVsSendCounts } from "@/utils/analytics";
 
 export default function Dashboard({ sessionId, token }) {
   const [attemptsVsSendsData, setAttemptsVsSendsData] = useState([]);

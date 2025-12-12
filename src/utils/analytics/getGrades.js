@@ -11,3 +11,14 @@ export function getGradeHistogram(attempts) {
     .map(([grade, count]) => ({ grade, count }))
     .sort((a, b) => a.grade.localeCompare(b.grade));
 }
+
+// Grade progression over time
+export function getGradeProgression(attempts, gradeToNum) {
+  return attempts
+    .filter(a => a.isAscent)
+    .sort((a, b) => a.date - b.date)
+    .map(a => ({
+      date: a.date,
+      grade: gradeToNum(a.grade),
+    }));
+}

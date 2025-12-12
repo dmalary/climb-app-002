@@ -12,3 +12,13 @@ export function cleanAttempts(data) {
     isRepeat: d.is_repeat === "True",
   }));
 }
+
+export function filterByBoard(attempts, board) {
+  return attempts.filter(a => a.board === board);
+}
+
+export function filterBySession(attempts, sessionDate) {
+  return attempts.filter(a =>
+    a.date.toDateString() === new Date(sessionDate).toDateString()
+  );
+}

@@ -18,8 +18,7 @@ import {
 } from "@/components/ui/carousel";
 
 import { GradeDistributionBar, MiniGradeDistributionBar} from "@/components/charts/GradeDistributionBar";
-import { getGradeHistogram } from "@/utils/analytics/getGrades";
-import { cleanAttempts } from "@/utils/analytics/getAttempts";
+import { getGradeHistogram, cleanAttempts } from "@/utils/analytics";
 
 import { Heart, MessageSquareText, Share } from "lucide-react";
 
