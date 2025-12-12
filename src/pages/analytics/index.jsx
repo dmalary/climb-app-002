@@ -82,16 +82,16 @@ export default function Home() {
   // ---------------------------
   const renderView = () => {
     if (selectedView === "overall")
-      return <div>StatsOverall</div>
-      // return <StatsOverall sessions={sessions} />;
+      // return <div>StatsOverall</div>
+      return <StatsOverall sessions={sessions} />;
 
     if (selectedView === "board")
-      return <div>StatsBoard</div>
-      // return <StatsBoard sessions={sessions} />;
+      // return <div>StatsBoard</div>
+      return <StatsBoard sessions={sessions} />;
 
     if (selectedView === "session")
-      return <div>StatsSession</div>
-      // return <StatsSession sessions={sessions} />;
+      // return <div>StatsSession</div>
+      return <StatsSession sessions={sessions} />;
 
     return null;
   };
