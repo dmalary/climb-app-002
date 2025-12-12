@@ -17,8 +17,11 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 
-import { Heart, MessageSquareText, Share } from "lucide-react";
+import { GradeDistributionBar, MiniGradeDistributionBar} from "@/components/charts/GradeDistributionBar";
+import { getGradeHistogram } from "@/utils/analytics/getGrades";
+import { cleanAttempts } from "@/utils/analytics/getAttempts";
 
+import { Heart, MessageSquareText, Share } from "lucide-react";
 
 export default function Stream({ sessionData, token, userId }) {
   const BATCH_SIZE = 10;
@@ -68,6 +71,7 @@ export default function Stream({ sessionData, token, userId }) {
 
 return (
     <div className="flex flex-col gap-4 w-full">
+      {/* make entire card clickable to view session as post (breakdown) */}
 
       {items.map((session) => (
         <SessionCard
@@ -88,7 +92,6 @@ return (
   );
 }
 
-
 /* ============================================================
    Single Session Card — loads its own attempts on mount
    ============================================================ */
@@ -97,11 +100,15 @@ return (
 
 function SessionCard({ session, token, username }) {
   const [attempts, setAttempts] = useState(null);
+  const [gradeDistributionData, setGradeDistributionData] = useState([]);
 
   useEffect(() => {
     async function loadAttempts() {
       const data = await getSessionAttempts(session.id, token);
       setAttempts(data || []);
+
+      const cleaned = cleanAttempts(data);
+      setGradeDistributionData(getGradeHistogram(cleaned));
     }
     loadAttempts();
   }, [session.id, token]);
@@ -117,32 +124,51 @@ function SessionCard({ session, token, username }) {
   const board = (attempts && attempts[0]?.board) || "b";
   const angles = [...new Set(sends.map((s) => s.angle))];
 
-  console.log('angles', angles)
+  console.log('gradeDistributionData', gradeDistributionData)
 
   return (
     <Card className="bg-stone-800 border-stone-700 text-white rounded-2xl shadow-md">
       {/* --- Header --- */}
       <CardHeader className="pb-2">
-        <CardTitle className="text-lg font-semibold">
-          {/* {attempts ? `${sends.length} Sends` : "Loading…"} */}
-          <div className="flex items-center gap-4 mt-4">
-            <div className="h-14 w-14 rounded-full bg-stone-700 flex items-center justify-center text-white text-lg font-semibold">
-              {username && username?.[0]?.toUpperCase() || "U"}
+        <div className="flex gap-4">
+
+          {/* LEFT — USER INFO (2/3) */}
+          <div className="w-2/3 flex flex-col justify-between">
+
+            <div className="flex items-center gap-4">
+              <div className="h-14 w-14 rounded-full bg-stone-700 flex items-center justify-center text-white text-lg font-semibold">
+                {(username && username[0]?.toUpperCase()) || "U"}
+              </div>
+
+              <div>
+                <h1 className="text-xl font-semibold text-stone-100">
+                  {username || "User"}
+                </h1>
+
+                <p className="text-xs text-stone-400">
+                  {sessionDate || ""}
+                </p>
+
+                <p className="text-xs text-stone-500 mt-1">
+                  {`${board.charAt(0).toUpperCase()}${board.slice(1)} Board`} • (gym loc)
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-xl font-semibold text-stone-100">
-                {username && username || "User"}
-              </h1>
-              <p className="text-xs text-stone-400">
-                {sessionDate && sessionDate}
-              </p>
-            </div>
+
           </div>
-        </CardTitle>
-        <CardDescription className="text-stone-400 text-sm">
-          {`${board.charAt(0).toUpperCase()}${board.slice(1)} Board`} • (gym loc)
-        </CardDescription>
+
+          {/* RIGHT — MINI CARD (1/3) */}
+          {/* <div className="w-1/3">
+            <Card className="bg-stone-800 border-stone-700 pb-0">
+              <CardContent className="px-1 pb-1">
+                <MiniGradeDistributionBar data={gradeDistributionData} />
+              </CardContent>
+            </Card>
+          </div> */}
+
+        </div>
       </CardHeader>
+
 
       {/* --- Content --- */}
       <CardContent className="text-sm text-stone-300 space-y-3">
@@ -181,7 +207,7 @@ function SessionCard({ session, token, username }) {
               {(sends.length ? sends : [{ placeholder: true }]).map(
                 (send, i) => (
                   <CarouselItem key={i} className="basis-4/5">
-                    <div className="h-28 bg-stone-700 rounded-lg flex items-center justify-center text-xs text-stone-400">
+                    <div className="h-44 bg-stone-700 rounded-lg flex items-center justify-center text-xs text-stone-400">
                       {send.placeholder
                         ? "No sends"
                         : `${send.displayed_grade} @ ${send.angle} • ${send.tries_total} tries`}
@@ -201,19 +227,19 @@ function SessionCard({ session, token, username }) {
           {/* Like */}
           <button className="flex items-center gap-1 hover:text-stone-300 transition">
             <Heart className="h-5 w-5" />
-            {/* <span>Like</span> */}
+            {/* add hyperlinks */}
           </button>
 
           {/* Comment */}
           <button className="flex items-center gap-1 hover:text-stone-300 transition">
             <MessageSquareText className="h-5 w-5" />
-            {/* <span>Comment</span> */}
+            {/* add hyperlinks */}
           </button>
 
           {/* Share */}
           <button className="flex items-center gap-1 hover:text-stone-300 transition">
             <Share className="h-5 w-5" />
-            {/* <span>Share</span> */}
+            {/* add hyperlinks */}
           </button>
 
         </div>
