@@ -74,8 +74,6 @@ export default function User() {
   // }
   // console.log('userData', userData) // currently returning null FIX!
 
-  const sends = 4; // temp placeholder from your logic
-
   return (
     <div className="space-y-6">
       {/* Top Nav */}
@@ -99,7 +97,7 @@ export default function User() {
       </div>
 
       {/* Grid (your stats + charts) */}
-      <Stream sessionData={sessions} token={token} />
+      <Stream sessionData={sessions} token={token} userId={userId}/>
     </div>
   );
 }

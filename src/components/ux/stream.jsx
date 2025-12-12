@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { getSessionAttempts } from "@/utils/db";
+import { getUser } from "@/utils/db";
 
 import {
   Card,
@@ -16,18 +17,35 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 
+import { Heart, MessageSquareText, Share } from "lucide-react";
 
-export default function Stream({ sessionData, token }) {
+
+export default function Stream({ sessionData, token, userId }) {
   const BATCH_SIZE = 10;
 
   const [visibleCount, setVisibleCount] = useState(BATCH_SIZE);
   const [items, setItems] = useState(sessionData.slice(0, BATCH_SIZE));
   const loaderRef = useRef(null);
+  const [username, setUsername] = useState(null);
 
+  console.log('userId', userId) // get username from userID, pass down to card
   // -------------------------------------------
   // Infinite scroll lazy loading
   // -------------------------------------------
   useEffect(() => {
+    async function loadUsername() {
+      if (!userId) return;
+
+      try {
+        const un = await getUser(userId, token);
+        setUsername(un.username || "");
+      } catch (err) {
+        console.error("Error loading usename:", err);
+      }
+    }
+
+    loadUsername();
+
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
@@ -46,6 +64,7 @@ export default function Stream({ sessionData, token }) {
     };
   }, [visibleCount, sessionData]);
 
+    console.log('username', username)
 
 return (
     <div className="flex flex-col gap-4 w-full">
@@ -55,6 +74,7 @@ return (
           key={session.id}
           session={session}
           token={token}
+          username={username}
         />
       ))}
 
@@ -73,9 +93,9 @@ return (
    Single Session Card — loads its own attempts on mount
    ============================================================ */
 
-// last card has session summary? or within session card
+// add session summary mini card
 
-function SessionCard({ session, token }) {
+function SessionCard({ session, token, username }) {
   const [attempts, setAttempts] = useState(null);
 
   useEffect(() => {
@@ -94,27 +114,65 @@ function SessionCard({ session, token }) {
 
   // Count sends (assuming result === "send")
   const sends = attempts?.filter((a) => a.is_ascent) || [];
+  const board = (attempts && attempts[0]?.board) || "b";
+  const angles = [...new Set(sends.map((s) => s.angle))];
+
+  console.log('angles', angles)
 
   return (
     <Card className="bg-stone-800 border-stone-700 text-white rounded-2xl shadow-md">
       {/* --- Header --- */}
       <CardHeader className="pb-2">
         <CardTitle className="text-lg font-semibold">
-          {attempts ? `${sends.length} Sends` : "Loading…"}
+          {/* {attempts ? `${sends.length} Sends` : "Loading…"} */}
+          <div className="flex items-center gap-4 mt-4">
+            <div className="h-14 w-14 rounded-full bg-stone-700 flex items-center justify-center text-white text-lg font-semibold">
+              {username && username?.[0]?.toUpperCase() || "U"}
+            </div>
+            <div>
+              <h1 className="text-xl font-semibold text-stone-100">
+                {username && username || "User"}
+              </h1>
+              <p className="text-xs text-stone-400">
+                {sessionDate && sessionDate}
+              </p>
+            </div>
+          </div>
         </CardTitle>
         <CardDescription className="text-stone-400 text-sm">
-          {sessionDate} • {attempts && ` ${attempts[0].board} Board`} 
-          {/* • {session.angle}° */}
+          {`${board.charAt(0).toUpperCase()}${board.slice(1)} Board`} • (gym loc)
         </CardDescription>
       </CardHeader>
 
       {/* --- Content --- */}
       <CardContent className="text-sm text-stone-300 space-y-3">
-        <p className="text-stone-300">
-          {attempts
-            ? `${attempts.length} total attempts`
-            : "Fetching attempts…"}
-        </p>
+        <div className="flex gap-6">
+          {/* Sends */}
+          <div className="flex flex-col items-center">
+            <span className="text-xs text-stone-500 uppercase tracking-wide">Sends</span>
+            <span className="text-stone-200 text-lg font-semibold">
+              {attempts ? sends.length : "–"}
+            </span>
+          </div>
+
+          {/* Climbs */}
+          <div className="flex flex-col items-center">
+            <span className="text-xs text-stone-500 uppercase tracking-wide">Climbs</span>
+            <span className="text-stone-200 text-lg font-semibold">
+              {attempts ? attempts.length : "–"}
+            </span>
+          </div>
+
+          {/* Angles */}
+          <div className="flex flex-col items-center">
+            <span className="text-xs text-stone-500 uppercase tracking-wide">Angle(s)</span>
+            <span className="text-stone-200 text-lg font-semibold">
+              {attempts && angles?.length > 0 
+                ? angles.join(", ")
+                : "–"}
+            </span>
+          </div>
+        </div>
 
         {/* --- Carousel of sends --- */}
         <div className="w-full">
@@ -137,8 +195,28 @@ function SessionCard({ session, token }) {
       </CardContent>
 
       {/* --- Footer --- */}
-      <CardFooter className="pt-2 text-xs text-stone-500 flex justify-between">
-        <span>View details</span>
+      <CardFooter className="pt-2 pl-10 pr-10 text-xs text-stone-500">
+        <div className="w-full flex justify-between">
+
+          {/* Like */}
+          <button className="flex items-center gap-1 hover:text-stone-300 transition">
+            <Heart className="h-5 w-5" />
+            {/* <span>Like</span> */}
+          </button>
+
+          {/* Comment */}
+          <button className="flex items-center gap-1 hover:text-stone-300 transition">
+            <MessageSquareText className="h-5 w-5" />
+            {/* <span>Comment</span> */}
+          </button>
+
+          {/* Share */}
+          <button className="flex items-center gap-1 hover:text-stone-300 transition">
+            <Share className="h-5 w-5" />
+            {/* <span>Share</span> */}
+          </button>
+
+        </div>
       </CardFooter>
     </Card>
   );

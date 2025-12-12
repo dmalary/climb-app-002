@@ -7,7 +7,7 @@ import SendAttemptBar from "@/components/charts/SendAttemptBar";
 import GradeDistributionBar from "@/components/charts/GradeDistributionBar";
 import SessionSummaryPie from "@/components/charts/SessionSummaryPie";
 
-import { getUserSessionAttempts } from "@/utils/db";
+import { getUserSessionAttempts, getSessionAttempts } from "@/utils/db";
 import { cleanAttempts } from "@/utils/analytics/getAttempts";
 import { getGradeHistogram } from "@/utils/analytics/getGrades";
 import { getSessionBreakdown, getAttemptVsSendCounts } from "@/utils/analytics/getSummaries";
@@ -21,7 +21,9 @@ export default function Dashboard({ sessionId, token }) {
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-      const rawAttempts = await getUserSessionAttempts(sessionId, token);
+      // const rawAttempts = await getUserSessionAttempts(sessionId, token);
+      const rawAttempts = await getSessionAttempts(sessionId, token);
+      // console.log('rawAttempts', rawAttempts)
 
       if (!rawAttempts) {
         setLoading(false);
@@ -31,7 +33,7 @@ export default function Dashboard({ sessionId, token }) {
       const cleaned = cleanAttempts(rawAttempts);
 
       // Attempts vs Sends
-      const avs = getAttemptVsSendCounts(cleaned);
+      const avs = getAttemptVsSendCounts(rawAttempts);
       setAttemptsVsSendsData([
         { name: "Attempts", value: avs.attempts },
         { name: "Sends", value: avs.sends },
@@ -41,7 +43,7 @@ export default function Dashboard({ sessionId, token }) {
       setGradeDistributionData(getGradeHistogram(cleaned));
 
       // Session summary pie
-      const summary = getSessionBreakdown(cleaned);
+      const summary = getSessionBreakdown(rawAttempts);
       setSessionSummaryData([
         { name: "Flashes", value: summary.flashes },
         { name: "Sends", value: summary.sends },

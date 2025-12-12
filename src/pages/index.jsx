@@ -92,7 +92,7 @@ export default function Home() {
 
         {/* {error && <div className="text-red-500">Error loading sessions</div>} */}
 
-        <Stream sessionData={sessions} token={token} />
+        <Stream sessionData={sessions} token={token} userId={userId}/>
 
       </div>
     </div>
