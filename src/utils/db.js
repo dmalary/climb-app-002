@@ -91,9 +91,28 @@ export async function getAllSessions() {
   }
 }
 
+export async function getUserAttempts(userId, token) {
+  try {
+    // Single fetch for ALL attempts
+    const res = await fetch(`/api/attempts/user/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!res.ok) throw new Error(`Failed to fetch attempts: ${res.status}`);
+
+    return await res.json();
+  } catch (err) {
+    console.error("Error fetching user attempts:", err);
+    return [];
+  }
+}
+
 export async function getSessionAttempts(sessionId, token){
   try {  
-    const res = await fetch(`/api/attempts/${sessionId}`, {
+    const res = await fetch(`/api/attempts/session/${sessionId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json"
@@ -111,6 +130,8 @@ export async function getSessionAttempts(sessionId, token){
     return null;
   }
 }
+
+
 
 // review below =====================================
 
@@ -134,27 +155,6 @@ export async function getGymLeaderboard(climbId){
 
 // export async function getHardestSend(userId){
 // }
-
-export async function getUserAttempts(userId, token){
-  try {  
-    const res = await fetch(`/api/attempts/${userId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-      }
-    });
-    
-    if (!res.ok) {
-      throw new Error(`Failed to fetch attempts: ${res.status}`);
-    }
-
-    return await res.json();
-
-  } catch (err) {
-    console.error("Error fetching session attempts:", err);
-    return null;
-  }
-}
 
 export async function getAllAttempts(sessionId, token){
   try {  

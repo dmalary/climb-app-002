@@ -2,18 +2,17 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import { useUser, useAuth } from '@clerk/nextjs'
-import { getUsers, getUserSessions } from '@/utils/db';
-import { getSessionAttempts } from "@/utils/db";
+import { getUsers, getUserSessions, getUserAttempts } from '@/utils/db';
 import { Geist, Geist_Mono } from "next/font/google";
 import { Skeleton } from "@/components/ui/skeleton"
-import Dashboard from '@/components/ux/dashboard';
+// import Dashboard from '@/components/ux/dashboard';
 import DynamicNav from '@/components/ux/dynamicNav';
 
 import StatsOverall from "@/components/ux/statsOverall";
 import StatsBoard from "@/components/ux/statsBoard";
 import StatsSession from "@/components/ux/statsSession";
 
-// load shadcn skeletons on initial load while fecthing data?
+import { normalizeVGrade } from "@/utils/grades";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,38 +27,53 @@ const geistMono = Geist_Mono({
 export default function Home() {
   const { userId, getToken, isSignedIn } = useAuth();
   // const { user } = useUser(); // user should already exist on this page
-  const [isLoading, setIsLoading] = useState(true);
-
+  
   const [sessions, setSessions] = useState([]);
-  const [selectedBoards, setSelectedBoards] = useState([]);
+  const [rawAttempts, setRawAttempts] = useState([]);
+  // const [selectedBoards, setSelectedBoards] = useState([]);
   const [selectedView, setSelectedView] = useState("overall"); 
+  const [isLoading, setIsLoading] = useState(true);
   const [token, setToken] = useState(null);
   // const [error, setError] = useState(0);
   
- // ---------------------------
-  // Fetch sessions
+  // ---------------------------
+  // Fetch sessions + attempts
   // ---------------------------
   useEffect(() => {
-    async function loadSessions() {
-      if (!userId) return;
+    if (!userId) return;
+
+    async function loadData() {
       setIsLoading(true);
 
       try {
-        const t = await getToken({ template: "supabase" });
-        setToken(t);
+        const token = await getToken({ template: "supabase" });
 
-        const userSessions = await getUserSessions(userId, t);
+        const userSessions = await getUserSessions(userId, token);
         setSessions(userSessions || []);
+
+        const attempts = await getUserAttempts(userId, token);
+        console.log('attempts', attempts)
+
+        // 🔑 Normalize grades ONCE here
+        const normalized = (attempts || []).map(a => {
+          const grade = normalizeVGrade(a.displayed_grade);
+          return {
+            ...a,
+            grade,
+            gradeNum: grade ? Number(grade.replace("V", "")) : null,
+          };
+        });
+
+        setRawAttempts(normalized);
       } catch (err) {
-        console.error("Error loading sessions:", err);
+        console.error("Error loading analytics:", err);
       } finally {
         setIsLoading(false);
       }
     }
 
-    loadSessions();
+    loadData();
   }, [userId, getToken]);
-
 
   // ---------------------------
   // Skeleton while loading
@@ -76,22 +90,35 @@ export default function Home() {
     );
   }
 
-
   // ---------------------------
   // Component router based on selectedView
   // ---------------------------
   const renderView = () => {
     if (selectedView === "overall")
-      // return <div>StatsOverall</div>
-      return <StatsOverall sessions={sessions} />;
+      return (
+        <StatsOverall
+          rawAttempts={rawAttempts}
+          isLoading={isLoading}
+        />
+      );
 
     if (selectedView === "board")
-      // return <div>StatsBoard</div>
-      return <StatsBoard sessions={sessions} />;
+      return (
+        <StatsBoard
+          sessions={sessions}
+          rawAttempts={rawAttempts}
+          isLoading={isLoading}
+        />
+      );
 
     if (selectedView === "session")
-      // return <div>StatsSession</div>
-      return <StatsSession sessions={sessions} />;
+      return (
+        <StatsSession
+          sessions={sessions}
+          rawAttempts={rawAttempts}
+          isLoading={isLoading}
+        />
+      );
 
     return null;
   };

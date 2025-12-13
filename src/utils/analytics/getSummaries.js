@@ -27,15 +27,15 @@ export function getSessionBreakdown(attempts) {
 }
 
 // Average grade (if you map grades to numeric scale)
-export function getAverageGrade(attempts, gradeToNum) {
-  const numeric = attempts.map(a => gradeToNum(a.grade));
+export function getAverageGrade(attempts) {
+  const numeric = attempts.map(a => a.grade);
   return numeric.reduce((a, b) => a + b, 0) / numeric.length;
 }
 
 // Highest grade
-export function getMaxGrade(attempts, gradeToNum) {
+export function getMaxGrade(attempts) {
   return attempts.reduce((max, a) =>
-    gradeToNum(a.grade) > gradeToNum(max.grade) ? a : max
+    a.gradeNum > max.gradeNum ? a : max
   );
 }
 
@@ -57,8 +57,50 @@ export function getFlashRate(attempts) {
 }
 
 // Top climbs (by grade or by tries)
-export function getTopClimbs(attempts, gradeToNum, count = 3) {
+export function getTopClimbs(attempts, count = 3) {
   return attempts
-    .sort((a, b) => gradeToNum(b.grade) - gradeToNum(a.grade))
+    .sort((a, b) => b.grade - a.grade)
     .slice(0, count);
+}
+
+// ————————————— existing code stays —————————————
+
+// Send percentage
+export function getSendPercentage(attempts) {
+  if (!attempts.length) return 0;
+  const sends = attempts.filter(a => a.isAscent).length;
+  return sends / attempts.length;
+}
+
+// Hardest flash (grade-based)
+export function getMaxFlashGrade(attempts) {
+  const flashes = attempts.filter(a => a.isAscent && a.tries === 1);
+  if (flashes.length === 0) return null;
+  return flashes.reduce((max, a) =>
+    a.grade > max.grade ? a : max
+  );
+}
+
+// Total unique climbs
+export function getTotalUniqueClimbs(attempts) {
+  const set = new Set(attempts.map(a => a.climbName));
+  return set.size;
+}
+
+// Benchmark sends only
+export function getBenchmarkCount(attempts) {
+  return attempts.filter(a => a.isAscent && a.isBenchmark).length;
+}
+
+// Repeat sends only
+export function getRepeatCount(attempts) {
+  return attempts.filter(a => a.isAscent && a.isRepeat).length;
+}
+
+// Avg attempts per send
+export function getAverageAttemptsPerSend(attempts) {
+  const sends = attempts.filter(a => a.isAscent);
+  if (sends.length === 0) return 0;
+  const total = sends.reduce((sum, s) => sum + s.tries, 0);
+  return total / sends.length;
 }

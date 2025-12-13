@@ -13,12 +13,12 @@ export function getGradeHistogram(attempts) {
 }
 
 // Grade progression over time
-export function getGradeProgression(attempts, gradeToNum) {
+export function getGradeProgression(attempts) {
   return attempts
     .filter(a => a.isAscent)
     .sort((a, b) => a.date - b.date)
     .map(a => ({
       date: a.date,
-      grade: gradeToNum(a.grade),
+      grade: a.grade,
     }));
 }
