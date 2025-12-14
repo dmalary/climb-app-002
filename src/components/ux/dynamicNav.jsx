@@ -12,6 +12,7 @@ import {
   ChartNoAxesCombined,
   Settings,
   UserRoundPen,
+  Share2,
 } from "lucide-react";
 
 export const navConfig = {
@@ -19,6 +20,10 @@ export const navConfig = {
     {
       href: "/analytics",
       icon: <ChartNoAxesCombined className="w-5 h-5" />,
+    },
+    {
+      href: "/social",
+      icon: <Share2 className="w-5 h-5" />,
     },
     {
       href: `/profile/${id}`,
@@ -40,6 +45,10 @@ export const navConfig = {
       icon: <ChartNoAxesCombined className="w-5 h-5" />,
     },
     {
+      href: "/social",
+      icon: <Share2 className="w-5 h-5" />,
+    },
+    {
       href: "/settings",
       icon: <Settings className="w-5 h-5" />,
     },
@@ -49,6 +58,29 @@ export const navConfig = {
     {
       href: "/",
       icon: <House className="w-5 h-5" />,
+    },
+    {
+      href: "/social",
+      icon: <Share2 className="w-5 h-5" />,
+    },
+    {
+      href: `/profile/${id}`,
+      icon: <UserRoundPen className="w-5 h-5" />,
+    },
+    {
+      href: "/settings",
+      icon: <Settings className="w-5 h-5" />,
+    },
+  ],
+
+  social: (id) => [
+    {
+      href: "/",
+      icon: <House className="w-5 h-5" />,
+    },
+    {
+      href: "/analytics",
+      icon: <ChartNoAxesCombined className="w-5 h-5" />,
     },
     {
       href: `/profile/${id}`,
@@ -73,6 +105,8 @@ export default function DynamicNav({ type = "home", userId }) {
         return navConfig.profile(userId);
       case "analytics":
         return navConfig.analytics(userId);
+      case "social":
+        return navConfig.social(userId);
       default:
         return navConfig.home(userId);
     }
