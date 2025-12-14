@@ -52,7 +52,7 @@ export default function Home() {
         setSessions(userSessions || []);
 
         const attempts = await getUserAttempts(userId, token);
-        console.log('attempts', attempts)
+        // console.log('attempts', attempts)
 
         // 🔑 Normalize grades ONCE here
         const normalized = (attempts || []).map(a => {
