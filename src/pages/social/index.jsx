@@ -31,7 +31,7 @@ export default function Home() {
   const [sessions, setSessions] = useState([]);
   const [rawAttempts, setRawAttempts] = useState([]);
   // const [selectedBoards, setSelectedBoards] = useState([]);
-  const [selectedView, setSelectedView] = useState("overall"); 
+  const [selectedView, setSelectedView] = useState("leaderboards"); 
   const [isLoading, setIsLoading] = useState(true);
   const [token, setToken] = useState(null);
   // const [error, setError] = useState(0);
