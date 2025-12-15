@@ -52,7 +52,7 @@ export default function User() {
 
   if (isLoading) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-6 px-4">
         <Skeleton className="h-10 w-40 rounded-md" />
         <Skeleton className="h-6 w-32" />
         <div className="grid grid-cols-2 gap-4 mt-4">
@@ -82,7 +82,7 @@ export default function User() {
       </div>
 
       {/* User Header */}
-      <div className="flex items-center gap-4 mt-4">
+      <div className="flex items-center gap-4 mt-4 px-4">
         <div className="h-14 w-14 rounded-full bg-stone-700 flex items-center justify-center text-white text-lg font-semibold">
           {/* {userData?.username?.[0]?.toUpperCase() || "U"} */}
           {"U"}

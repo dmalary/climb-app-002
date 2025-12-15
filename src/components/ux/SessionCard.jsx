@@ -52,10 +52,10 @@ export default function SessionCard({ session, token, username }) {
   const board = (attempts && attempts[0]?.board) || "b";
   const angles = [...new Set(sends.map((s) => s.angle))];
 
-  console.log('gradeDistributionData', gradeDistributionData)
+  // console.log('gradeDistributionData', gradeDistributionData)
 
   return (
-    <Card className="bg-stone-800 border-stone-700 text-white rounded-2xl shadow-md">
+    <Card className="bg-stone-800 border-none text-white rounded-none shadow-md">
       {/* --- Header --- */}
       <CardHeader className="pb-2">
         <div className="flex gap-4">

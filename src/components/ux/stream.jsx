@@ -50,7 +50,7 @@ export default function Stream({ sessionData, token, userId }) {
     console.log('username', username)
 
 return (
-    <div className="flex flex-col gap-4 w-full">
+    <div className="flex flex-col gap-2 w-full">
       {/* make entire card clickable to view session as post (breakdown) */}
 
       {items.map((session) => (
