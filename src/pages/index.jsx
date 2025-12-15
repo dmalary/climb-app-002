@@ -4,13 +4,13 @@ import { useEffect, useState } from 'react';
 // import { useSession, useUser, useAuth, getToken } from '@clerk/nextjs'
 import { useUser, useAuth } from '@clerk/nextjs'
 import { getUsers, getUserSessions, getAllSessions, getUserAttempts, getAllAttempts } from '@/utils/db';
-import { getMainFeed } from "@/services/mainFeed"
+// import { getMainFeed } from "@/services/mainFeed"
 import { Geist, Geist_Mono } from "next/font/google";
 import { Skeleton } from "@/components/ui/skeleton"
-import Stream from '@/components/ux/stream';
-import DynamicNav from '@/components/ux/dynamicNav';
-import ImportBoard from '@/components/ux/importBoard';
-import SyncPublic from '@/components/ux/syncPublic';
+import Stream from '@/components/ux/Stream';
+import DynamicNav from '@/components/ux/DynamicNav';
+import ImportBoard from '@/components/ux/ImportBoard';
+import SyncPublic from '@/components/ux/SyncPublic';
 
 // load shadcn skeletons on initial load while fecthing data?
 

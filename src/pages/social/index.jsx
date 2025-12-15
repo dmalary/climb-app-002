@@ -6,11 +6,11 @@ import { getUsers, getUserSessions, getUserAttempts } from '@/utils/db';
 import { Geist, Geist_Mono } from "next/font/google";
 import { Skeleton } from "@/components/ui/skeleton"
 // import Dashboard from '@/components/ux/dashboard';
-import DynamicNav from '@/components/ux/dynamicNav';
+import DynamicNav from '@/components/ux/DynamicNav';
 
-import StatsOverall from "@/components/ux/statsOverall";
-import StatsBoard from "@/components/ux/statsBoard";
-import StatsSession from "@/components/ux/statsSession";
+import StatsOverall from "@/components/ux/StatsOverall";
+import StatsBoard from "@/components/ux/StatsBoard";
+import StatsSession from "@/components/ux/StatsSession";
 
 import { normalizeVGrade } from "@/utils/grades";
 

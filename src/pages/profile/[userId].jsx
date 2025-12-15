@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { getUser, getUserSessions } from "@/utils/db";
 import { Skeleton } from "@/components/ui/skeleton";
-import DynamicNav from '@/components/ux/dynamicNav';
+import DynamicNav from '@/components/ux/DynamicNav';
 import Grid from "@/components/ux/grid";
-import Stream from '@/components/ux/stream';
+import Stream from '@/components/ux/Stream';
 
 export default function User() {
   const router = useRouter();
