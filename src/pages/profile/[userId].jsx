@@ -77,7 +77,9 @@ export default function User() {
   return (
     <div className="space-y-6">
       {/* Top Nav */}
-      <DynamicNav type="profile" userId={userId} />
+      <div className='px-4'>
+        <DynamicNav type="profile" userId={userId} />
+      </div>
 
       {/* User Header */}
       <div className="flex items-center gap-4 mt-4">

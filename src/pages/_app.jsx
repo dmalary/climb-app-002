@@ -36,7 +36,7 @@ export default function App({ Component, pageProps }) {
         </SignedIn>
 
         {/* Main content wrapper */}
-        <main className="w-full max-w-2xl flex flex-col items-center px-4 pb-12">
+        <main className="w-full max-w-2xl flex flex-col items-center pb-12">
           
           {/* Signed-out card */}
           <SignedOut>
