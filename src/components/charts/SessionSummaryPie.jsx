@@ -11,9 +11,9 @@ import {
 
 const COLORS = ["#3b82f6", "#f59e0b", "#ef4444"]; // Sends, Flashes, Attempts
 
-export default function SessionSummaryPie({ data }) {
+export default function SessionSummaryPie({ data = [] }) {
   return (
-    <ResponsiveContainer width="100%" height={300}>
+    <div width="100%" height={300}>
       <PieChart>
         <Tooltip />
         <Legend verticalAlign="bottom" height={36} />
@@ -29,6 +29,6 @@ export default function SessionSummaryPie({ data }) {
           ))}
         </Pie>
       </PieChart>
-    </ResponsiveContainer>
+    </div>
   );
 }

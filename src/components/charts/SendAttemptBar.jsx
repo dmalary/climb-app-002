@@ -10,9 +10,9 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-export default function SendAttemptBar({ data }) {
+export default function SendAttemptBar({ data = [] }) {
   return (
-    <ResponsiveContainer width="100%" height={300}>
+    <div width="100%" height={300}>
       <BarChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="name" />
@@ -20,6 +20,6 @@ export default function SendAttemptBar({ data }) {
         <Tooltip />
         <Bar dataKey="value" fill="#3b82f6" />
       </BarChart>
-    </ResponsiveContainer>
+    </div>
   );
 }
