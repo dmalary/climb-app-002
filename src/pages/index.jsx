@@ -86,11 +86,11 @@ export default function Home() {
   return (
     <div className="flex justify-center bg-stone-900 min-h-screen">
       <div className="w-full max-w-lg mx-auto space-y-6">
-        <div className='px-4'>
+        <div className='px-4 flex flex-col gap-2'>
           <DynamicNav type="home" userId={user.id} />
+          <ImportBoard />
+          <SyncPublic />
         </div>
-        <ImportBoard />
-        <SyncPublic />
 
         {/* {error && <div className="text-red-500">Error loading sessions</div>} */}
 
