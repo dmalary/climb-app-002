@@ -8,9 +8,9 @@ import { Skeleton } from "@/components/ui/skeleton"
 // import Dashboard from '@/components/ux/dashboard';
 import DynamicNav from '@/components/ux/DynamicNav';
 
-import StatsOverall from "@/components/ux/StatsOverall";
-import StatsBoard from "@/components/ux/StatsBoard";
-import StatsSession from "@/components/ux/StatsSession";
+import StatsOverall from "@/components/ux/stats/StatsOverall";
+import StatsBoard from "@/components/ux/stats/StatsBoard";
+import StatsSession from "@/components/ux/stats/StatsSession";
 
 import { normalizeVGrade } from "@/utils/grades";
 
