@@ -8,8 +8,9 @@ import { Card, CardHeader, CardContent } from "@/components/ui/card";
 
 export default function SessionSendsCarousel({ session, attempts, username }) {
   const sends = attempts.filter(a => a.isAscent);
+  const [{ date }] = session;
 
-  const sessionDate = new Date(session.date).toLocaleDateString("en-US", {
+  const sessionDate = new Date(date).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",
