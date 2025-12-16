@@ -1,3 +1,5 @@
+import { normalizeVGrade } from "@/utils/grades";
+
 // Angle distribution histogram
 export function getAngleHistogram(attempts) {
   const counts = {};
@@ -28,8 +30,6 @@ export function getAngleGradeHeatmap(attempts) {
     return { angle: Number(angle), grade, count };
   });
 }
-
-import { normalizeVGrade } from "@/utils/grades";
 
 export function cleanAttempts(data) {
   return data.map(d => {

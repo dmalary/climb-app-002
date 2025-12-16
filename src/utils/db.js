@@ -1,3 +1,10 @@
+// Add this guard in all fetch utils:
+
+// const contentType = res.headers.get("content-type");
+// if (!contentType?.includes("application/json")) {
+//   throw new Error("Non-JSON response received");
+// }
+
 export async function getUsers() {
   // const res = await fetch("/api/users"); 
   try {
@@ -44,7 +51,7 @@ export async function getUserSessions(userId, token) {
       return [];
     }
 
-    const res = await fetch(`/api/sessions/${userId}`, {
+    const res = await fetch(`/api/sessions/user/${userId}`, {
       headers: {
         "Content-Type": "application/json",
         ...(token && { Authorization: `Bearer ${token}` })
@@ -70,6 +77,28 @@ export async function getUserSessions(userId, token) {
     return [];
   }
 }
+
+export async function getSession(sessionId, token){
+  try {  
+    const res = await fetch(`/api/sessions/${sessionId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    });
+    
+    if (!res.ok) {
+      throw new Error(`Failed to fetch session: ${res.status}`);
+    }
+
+    return await res.json();
+
+  } catch (err) {
+    console.error("Error fetching session:", err);
+    return null;
+  }
+}
+
 
 export async function getAllSessions() {
   try {
@@ -112,7 +141,7 @@ export async function getUserAttempts(userId, token) {
 
 export async function getSessionAttempts(sessionId, token){
   try {  
-    const res = await fetch(`/api/attempts/session/${sessionId}`, {
+    const res = await fetch(`/api/attempts/${sessionId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json"
