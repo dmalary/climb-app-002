@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server'
 import { clerkMiddleware } from '@clerk/nextjs/server';
 
-export function middleware(req) {
-  return console.log('req.url', req.url)
-}
+// export function middleware(req) {
+//   return console.log('req.url', req.url)
+// }
 
 export default clerkMiddleware();
 
