@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
+import Link from "next/link";
 import { getUser } from "@/utils/db";
-import SessionCard from "@/components/ux/SessionCard"
+import SessionCard from "@/components/ux/sessions/SessionCard"
 
 
 export default function Stream({ sessionData, token, userId }) {
@@ -49,18 +50,32 @@ export default function Stream({ sessionData, token, userId }) {
 
     console.log('username', username)
 
+{/* <button
+  className="flex items-center gap-1 hover:text-stone-300 transition"
+  onClick={(e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }}
+>
+  <Heart className="h-5 w-5" />
+</button>
+This is exactly how Instagram-style cards work. */}
+
 return (
     <div className="flex flex-col gap-2 w-full">
-      {/* make entire card clickable to view session as post (breakdown) */}
-
-      {items.map((session) => (
+    {items.map((session) => (
+      <Link
+        key={session.id}
+        href={`/sessions/${session.id}`}
+        className="block"
+      >
         <SessionCard
-          key={session.id}
           session={session}
           token={token}
           username={username}
         />
-      ))}
+      </Link>
+    ))}
 
       <div
         ref={loaderRef}
