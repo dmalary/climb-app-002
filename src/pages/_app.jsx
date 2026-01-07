@@ -22,19 +22,6 @@ export default function App({ Component, pageProps }) {
     >
       <div className="min-h-screen bg-stone-900 flex flex-col items-center">
         
-        {/* Top nav (when signed in) */}
-        <SignedIn>
-          <nav className="w-full max-w-3xl px-4 py-4 flex justify-end">
-            <UserButton 
-              appearance={{
-                elements: {
-                  avatarBox: "ring-2 ring-lime-400 rounded-full",
-                },
-              }}
-            />
-          </nav>
-        </SignedIn>
-
         {/* Main content wrapper */}
         <main className="w-full max-w-2xl flex flex-col items-center pb-12">
           

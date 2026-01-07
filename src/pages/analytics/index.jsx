@@ -13,6 +13,8 @@ import StatsBoard from "@/components/ux/stats/StatsBoard";
 import StatsSession from "@/components/ux/stats/StatsSession";
 
 import { normalizeVGrade } from "@/utils/grades";
+import AppShell from "@/components/ux/AppShell";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -127,39 +129,41 @@ export default function Home() {
   // Render
   // ---------------------------
   return (
-    <div className="flex justify-center bg-stone-900 min-h-screen p-4">
-      <div className="w-full max-w-lg mx-auto space-y-6">
+    <AppShell>
+      <div className="flex justify-center bg-stone-900 min-h-screen p-4">
+        <div className="w-full max-w-lg mx-auto space-y-6">
 
-        {/* Nav */}
-        <DynamicNav type="analytics" userId={userId} />
+          {/* Nav */}
+          {/* <DynamicNav type="analytics" userId={userId} /> */}
 
-        {/* View Switcher */}
-        <div className="flex w-full rounded-xl bg-stone-800 p-1">
-          {["overall", "board", "session"].map((view) => (
-            <button
-              key={view}
-              onClick={() => setSelectedView(view)}
-              className={`
-                flex-1 py-2 text-sm font-medium capitalize rounded-lg 
-                transition-all duration-200
-                ${
-                  selectedView === view
-                    ? "bg-stone-700 text-white"
-                    : "text-stone-400 hover:text-white"
-                }
-              `}
-            >
-              {view}
-            </button>
-          ))}
+          {/* View Switcher */}
+          <div className="flex w-full rounded-xl bg-stone-800 p-1">
+            {["overall", "board", "session"].map((view) => (
+              <button
+                key={view}
+                onClick={() => setSelectedView(view)}
+                className={`
+                  flex-1 py-2 text-sm font-medium capitalize rounded-lg 
+                  transition-all duration-200
+                  ${
+                    selectedView === view
+                      ? "bg-stone-700 text-white"
+                      : "text-stone-400 hover:text-white"
+                  }
+                `}
+              >
+                {view}
+              </button>
+            ))}
+          </div>
+
+          {/* Analytics View Content */}
+          <div className="mt-4">
+            {renderView()}
+          </div>
+
         </div>
-
-        {/* Analytics View Content */}
-        <div className="mt-4">
-          {renderView()}
-        </div>
-
       </div>
-    </div>
+    </AppShell>
   );
 }

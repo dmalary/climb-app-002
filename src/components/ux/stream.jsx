@@ -48,7 +48,7 @@ export default function Stream({ sessionData, token, userId }) {
     };
   }, [visibleCount, sessionData]);
 
-    console.log('username', username)
+    // console.log('username', username)
 
 {/* <button
   className="flex items-center gap-1 hover:text-stone-300 transition"

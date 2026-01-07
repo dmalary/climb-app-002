@@ -8,6 +8,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import DynamicNav from '@/components/ux/DynamicNav';
 import Grid from "@/components/ux/grid";
 import Stream from '@/components/ux/Stream';
+import AppShell from "@/components/ux/AppShell";
+
 
 export default function User() {
   const router = useRouter();
@@ -75,31 +77,33 @@ export default function User() {
   // console.log('userData', userData) // currently returning null FIX!
 
   return (
-    <div className="space-y-6">
-      {/* Top Nav */}
-      <div className='px-4'>
-        <DynamicNav type="profile" userId={userId} />
-      </div>
+    <AppShell>
+      <div className="space-y-6">
+        {/* Top Nav */}
+        {/* <div className='px-4'>
+          <DynamicNav type="profile" userId={userId} />
+        </div> */}
 
-      {/* User Header */}
-      <div className="flex items-center gap-4 mt-4 px-4">
-        <div className="h-14 w-14 rounded-full bg-stone-700 flex items-center justify-center text-white text-lg font-semibold">
-          {/* {userData?.username?.[0]?.toUpperCase() || "U"} */}
-          {"U"}
+        {/* User Header */}
+        <div className="flex items-center gap-4 mt-4 px-4">
+          <div className="h-14 w-14 rounded-full bg-stone-700 flex items-center justify-center text-white text-lg font-semibold">
+            {/* {userData?.username?.[0]?.toUpperCase() || "U"} */}
+            {"U"}
+          </div>
+          <div>
+            <h1 className="text-xl font-semibold text-stone-100">
+              {/* {userData?.username || "User"} */}
+              {"User"}
+            </h1>
+            <p className="text-sm text-stone-400">
+              {sessions?.length || 0} sessions logged
+            </p>
+          </div>
         </div>
-        <div>
-          <h1 className="text-xl font-semibold text-stone-100">
-            {/* {userData?.username || "User"} */}
-            {"User"}
-          </h1>
-          <p className="text-sm text-stone-400">
-            {sessions?.length || 0} sessions logged
-          </p>
-        </div>
-      </div>
 
-      {/* Grid (your stats + charts) */}
-      <Stream sessionData={sessions} token={token} userId={userId}/>
-    </div>
+        {/* Grid (your stats + charts) */}
+        <Stream sessionData={sessions} token={token} userId={userId}/>
+      </div>
+    </AppShell>
   );
 }
