@@ -8,9 +8,7 @@ import { getUsers, getUserSessions, getAllSessions, getUserAttempts, getAllAttem
 import { Geist, Geist_Mono } from "next/font/google";
 import { Skeleton } from "@/components/ui/skeleton"
 import Stream from '@/components/ux/Stream';
-import DynamicNav from '@/components/ux/DynamicNav';
-import ImportBoard from '@/components/ux/ImportBoard';
-import SyncPublic from '@/components/ux/SyncPublic';
+// import SyncPublic from '@/components/ux/SyncPublic';
 import AppShell from "@/components/ux/AppShell";
 
 // load shadcn skeletons on initial load while fecthing data?
