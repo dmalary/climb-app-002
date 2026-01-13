@@ -20,6 +20,8 @@ import SessionNumsCard from "@/components/ux/sessions/SessionNumsCard";
 import SessionChartsCard from "@/components/ux/sessions/SessionChartsCard";
 import AppShell from "@/components/ux/AppShell";
 
+import { ChevronLeft } from "lucide-react";
+
 export default function SessionDetailsPage() {
   const username = "U";
 
@@ -59,6 +61,17 @@ export default function SessionDetailsPage() {
     loadSession();
   }, [router.isReady, sessionId, token]);
 
+  const handleBack = () => {
+    const returnPath = sessionStorage.getItem("sessionReturnPath");
+
+    if (returnPath) {
+      sessionStorage.removeItem("sessionReturnPath");
+      router.push(returnPath);
+    } else {
+      router.back(); // fallback if they landed directly
+    }
+  };
+
   const sessionNums = useMemo(() => {
     if (!attempts) return null;
     return getSessionNums(attempts);
@@ -88,8 +101,17 @@ export default function SessionDetailsPage() {
   return (
     <AppShell>
       <div className="space-y-8 py-6 flex flex-col gap-2">
-        {/* add a round left arrow icon to return to last page (home or profile) */}
         {/* Top carousel turn stream SessionCard into component?*/}
+        <div className="flex items-center gap-3 px-4 mb-3">
+          <button
+            // onClick={handleBack}
+            className="w-10 h-10 rounded-full bg-stone-800 flex items-center justify-center text-stone-300 hover:bg-stone-700 transition"
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <span className="text-stone-400 text-sm">Back</span>
+        </div>
+
         <SessionSendsCarousel
           session={[session]}
           attempts={attempts}
