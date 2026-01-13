@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { getUser } from "@/utils/db";
 import SessionCard from "@/components/ux/sessions/SessionCard"
 
@@ -12,7 +13,13 @@ export default function Stream({ sessionData, token, userId }) {
   const loaderRef = useRef(null);
   const [username, setUsername] = useState(null);
 
-  console.log('userId', userId) // get username from userID, pass down to card
+  const router = useRouter();
+
+  const handleClick = () => {
+    sessionStorage.setItem('sessionReturnPath', router.asPath)
+  };
+
+  // console.log('userId', userId) // get username from userID, pass down to card
   // -------------------------------------------
   // Infinite scroll lazy loading
   // -------------------------------------------
@@ -67,6 +74,7 @@ return (
       <Link
         key={session.id}
         href={`/sessions/${session.id}`}
+        onClick={handleClick}
         className="block"
       >
         <SessionCard

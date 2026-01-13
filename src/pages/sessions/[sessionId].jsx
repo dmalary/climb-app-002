@@ -61,6 +61,7 @@ export default function SessionDetailsPage() {
     loadSession();
   }, [router.isReady, sessionId, token]);
 
+  // history-aware navigation
   const handleBack = () => {
     const returnPath = sessionStorage.getItem("sessionReturnPath");
 
@@ -104,7 +105,7 @@ export default function SessionDetailsPage() {
         {/* Top carousel turn stream SessionCard into component?*/}
         <div className="flex items-center gap-3 px-4 mb-3">
           <button
-            // onClick={handleBack}
+            onClick={handleBack}
             className="w-10 h-10 rounded-full bg-stone-800 flex items-center justify-center text-stone-300 hover:bg-stone-700 transition"
           >
             <ChevronLeft size={20} />
