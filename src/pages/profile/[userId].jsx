@@ -35,6 +35,7 @@ export default function User() {
         // setUserData(userRes);
 
         const sessionsRes = await getUserSessions(userId);
+        // const sessionsRes = await getUserSessions(userId, t);
         setSessions(sessionsRes);
         // const sessionsRes = await Promise.all([getUserSessions(userId)]);
         // setSessions([...(sessionsRes || [])]);
@@ -96,7 +97,7 @@ export default function User() {
               {"User"}
             </h1>
             <p className="text-sm text-stone-400">
-              {sessions?.length || 0} sessions logged
+              {Array.isArray(sessions) ? sessions.length : 0} sessions logged
             </p>
           </div>
         </div>

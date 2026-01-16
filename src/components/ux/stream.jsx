@@ -5,7 +5,7 @@ import { getUser } from "@/utils/db";
 import SessionCard from "@/components/ux/sessions/SessionCard"
 
 
-export default function Stream({ sessionData, token, userId }) {
+export default function Stream({ sessionData = [], token, userId }) {
   const BATCH_SIZE = 10;
 
   const [visibleCount, setVisibleCount] = useState(BATCH_SIZE);
@@ -67,6 +67,15 @@ export default function Stream({ sessionData, token, userId }) {
   <Heart className="h-5 w-5" />
 </button>
 This is exactly how Instagram-style cards work. */}
+
+if (!Array.isArray(sessionData) || sessionData.length === 0) {
+  return (
+    <div className="text-center text-stone-400 py-12">
+      No climbing data yet.<br />
+      Import your board to get started.
+    </div>
+  );
+}
 
 return (
     <div className="flex flex-col gap-2 w-full">

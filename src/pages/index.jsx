@@ -48,12 +48,15 @@ export default function Home() {
         //   getUserSessions(user, token),
         //   getUserFollowSessions(user.id, token)
         // ]);
-        const [mySessions] = await Promise.all([getUserSessions()]);
+        // const [mySessions] = await Promise.all([getUserSessions()]);
         const [allSessions] = await Promise.all([getAllSessions()]);
+        // const [allSessions] = await getAllSessions();
 
         // const feedData = [...mySessions , ...followingSessions]
         // const feedData = [...(mySessions || [])]
-        const sessionData = [...(allSessions || [])]
+        // const sessionData = [...(allSessions || [])]
+        const sessionData = Array.isArray(allSessions) ? allSessions : [];
+                
         // .sort(
         //   (a, b) => new Date(b.date) - new Date(a.date)
         // );
