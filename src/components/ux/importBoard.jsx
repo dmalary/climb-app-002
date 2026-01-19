@@ -64,7 +64,7 @@ export default function ImportBoard() {
           board: boardVal,
           username: userVal,
           password: passVal,
-          authProvider: authChoice,
+          authProvider: manual,
         },
         {
           headers: {
@@ -74,7 +74,7 @@ export default function ImportBoard() {
       );
 
       console.log("Import started:", res.data);
-      alert(`Import started for ${boardVal}`);
+      alert(`Import started for ${boardVal}`); // remove this?
     } catch (err) {
       console.error("Import failed:", err);
       alert("Error importing board data. Check console for details.");
@@ -109,12 +109,15 @@ export default function ImportBoard() {
             </SelectContent>
           </Select>
           <FieldDescription>
-            Choose the system where you log your climbs
+            Sign in to your board account
+          </FieldDescription>
+          <FieldDescription>
+            If you normally use Google/Apple, enter the email + password you set for the board.
           </FieldDescription>
         </Field>
 
         {/* AUTH METHOD */}
-        <Field>
+        {/* <Field>
           <FieldLabel>Authentication method</FieldLabel>
           <Select value={authChoice} onValueChange={setAuthChoice}>
             <SelectTrigger>
@@ -131,7 +134,7 @@ export default function ImportBoard() {
           <FieldDescription>
             How you log into your board account
           </FieldDescription>
-        </Field>
+        </Field> */}
 
         {/* CREDENTIALS */}
         <FieldSet>
