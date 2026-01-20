@@ -108,11 +108,19 @@ export default function ImportBoard() {
               ))}
             </SelectContent>
           </Select>
-          <FieldDescription>
+          {/* <FieldDescription>
             Sign in to your board account
+          </FieldDescription> */}
+          <FieldDescription>
+            Enter the credentials for your board account.
+            {/* This may be different from your Google or Apple login. */}
           </FieldDescription>
           <FieldDescription>
             If you normally use Google/Apple, enter the email + password you set for the board.
+          </FieldDescription>
+          <FieldDescription>
+            If you normally tap “Continue with Google” in the board app,
+            you still have a board password. You may need to reset it (this should not log you off the app).
           </FieldDescription>
         </Field>
 
