@@ -20,6 +20,8 @@ import { getGradeHistogram, cleanAttempts } from "@/utils/analytics";
 
 import { Heart, MessageSquareText, Share } from "lucide-react";
 
+import { getClimbImageUrl } from "@/utils/climbImageHelper";
+
 /* ============================================================
    Single Session Card — loads its own attempts on mount
    ============================================================ */
@@ -51,6 +53,8 @@ export default function SessionCard({ session, token, username }) {
   const sends = attempts?.filter((a) => a.is_ascent) || [];
   const board = (attempts && attempts[0]?.board) || "b";
   const angles = [...new Set(sends.map((s) => s.angle))];
+
+  const PLACEHOLDER_SRC = "/assets/climb-placeholder.png"; // local static asset
 
   // console.log('gradeDistributionData', gradeDistributionData)
 
@@ -129,7 +133,7 @@ export default function SessionCard({ session, token, username }) {
         </div>
 
         {/* --- Carousel of sends --- */}
-        <div className="w-full">
+        {/* <div className="w-full">
           <Carousel className="w-full">
             <CarouselContent>
               {(sends.length ? sends : [{ placeholder: true }]).map(
@@ -145,7 +149,50 @@ export default function SessionCard({ session, token, username }) {
               )}
             </CarouselContent>
           </Carousel>
+        </div> */}
+
+        {/* --- Carousel of sends --- */}
+        <div className="w-full">
+          <Carousel className="w-full">
+            <CarouselContent>
+              {(sends.length ? sends : [{ placeholder: true }]).map(
+                (send, i) => {
+                  const imageUrl =
+                    !send.placeholder && send.climb_id
+                      ? getClimbImageUrl(board, send.climb_id)
+                      : null;
+
+                  return (
+                    <CarouselItem key={i} className="basis-4/5">
+                      <div className="h-44 rounded-lg overflow-hidden bg-stone-700 flex items-center justify-center">
+                        {send.placeholder ? (
+                          <span className="text-xs text-stone-400">No sends</span>
+                        ) : (
+                          <img
+                            src={imageUrl}
+                            alt={send.climb_name || "Climb image"}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                            onError={(e) => {
+                              e.currentTarget.src = PLACEHOLDER_SRC;
+                            }}
+                          />
+                        )}
+                      </div>
+
+                      {!send.placeholder && (
+                        <div className="mt-2 text-xs text-stone-400">
+                          {send.displayed_grade} @ {send.angle}° • {send.tries_total} tries
+                        </div>
+                      )}
+                    </CarouselItem>
+                  );
+                }
+              )}
+            </CarouselContent>
+          </Carousel>
         </div>
+
       </CardContent>
 
       {/* --- Footer --- */}
