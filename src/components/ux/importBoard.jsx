@@ -73,6 +73,15 @@ export default function ImportBoard() {
         }
       );
 
+      const climbIds = res.data?.imported_climb_ids || [];
+      if (climbIds.length) {
+        await axios.post(
+          "/api/images/ensure",
+          { board: boardVal, climbIds },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+      }
+
       console.log("Import started:", res.data);
       setStatusMsg(`Import started for ${boardVal}`); 
 
