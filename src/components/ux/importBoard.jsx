@@ -2,7 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 import { useUser, useAuth } from "@clerk/nextjs";
 import { BOARD_OPTIONS } from "@/utils/boardOptions";
-
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Card,
   CardHeader,
@@ -11,7 +12,6 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-
 import {
   Select,
   SelectContent,
@@ -19,9 +19,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-import { Button } from "@/components/ui/button";
-
 import {
   Field,
   FieldDescription,
@@ -30,33 +27,36 @@ import {
   FieldSet,
 } from "@/components/ui/field";
 
-import { Input } from "@/components/ui/input";
-
 export default function ImportBoard() {
   const [boardVal, setBoardVal] = useState("");
-  const [authChoice, setAuthChoice] = useState("");
+  // const [authChoice, setAuthChoice] = useState("manual");
   const [userVal, setUserVal] = useState("");
   const [passVal, setPassVal] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [statusMsg, setStatusMsg] = useState("");
 
   const { isSignedIn, getToken } = useAuth();
-  const { user } = useUser();
+  // const { user } = useUser();
 
   const handleImport = async () => {
+    setStatusMsg("");
+
     if (!isSignedIn) {
-      alert("Please sign in with your main account first.");
+      setStatusMsg("Please sign in first.");
       return;
     }
 
-    if (!boardVal || !authChoice || !userVal || !passVal) {
-      alert("Please fill in all fields.");
+    if (!boardVal || !userVal || !passVal) {
+      setStatusMsg("Please fill in all fields.");
       return;
     }
 
     try {
       setIsSubmitting(true);
 
-      const token = await getToken({ template: "supabase" });
+      // const token = await getToken({ template: "supabase" });
+      const token = await getToken();
+      if (!token) throw new Error("Missing auth token");
 
       const res = await axios.post(
         "/api/import-user-board-data",
@@ -64,7 +64,7 @@ export default function ImportBoard() {
           board: boardVal,
           username: userVal,
           password: passVal,
-          authProvider: manual,
+          authProvider: "manual",
         },
         {
           headers: {
@@ -74,10 +74,12 @@ export default function ImportBoard() {
       );
 
       console.log("Import started:", res.data);
-      alert(`Import started for ${boardVal}`); // remove this?
+      setStatusMsg(`Import started for ${boardVal}`); 
+
+      setPassVal("");
     } catch (err) {
       console.error("Import failed:", err);
-      alert("Error importing board data. Check console for details.");
+      setStatusMsg("Error importing board data. Check console for details.");
     } finally {
       setIsSubmitting(false);
     }
@@ -167,6 +169,10 @@ export default function ImportBoard() {
             </Field>
           </FieldGroup>
         </FieldSet>
+
+        {statusMsg && (
+          <p className="text-sm text-stone-500">{statusMsg}</p>
+        )}
       </CardContent>
 
       {/* SUBMIT */}
@@ -175,7 +181,7 @@ export default function ImportBoard() {
           className="w-full"
           onClick={handleImport}
           disabled={
-            isSubmitting || !boardVal || !authChoice || !userVal || !passVal
+            isSubmitting || !boardVal || !userVal || !passVal
           }
         >
           {isSubmitting ? "Importing…" : `Import ${boardVal || "board"} data`}
