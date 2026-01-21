@@ -160,6 +160,27 @@ export async function getSessionAttempts(sessionId, token){
   }
 }
 
+// review, do i need?
+export async function getAllAttempts(sessionId, token){
+  try {  
+    const res = await fetch(`/api/attempts/`, {
+      headers: {
+        // Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    });
+    
+    if (!res.ok) {
+      throw new Error(`Failed to fetch attempts: ${res.status}`);
+    }
+
+    return await res.json();
+
+  } catch (err) {
+    console.error("Error fetching session attempts:", err);
+    return null;
+  }
+}
 
 
 // review below =====================================
@@ -182,89 +203,8 @@ export async function getGymClimberLeaderboard(climbId){
 export async function getGymLeaderboard(climbId){
 }
 
-// export async function getHardestSend(userId){
-// }
-
-export async function getAllAttempts(sessionId, token){
-  try {  
-    const res = await fetch(`/api/attempts/`, {
-      headers: {
-        // Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-      }
-    });
-    
-    if (!res.ok) {
-      throw new Error(`Failed to fetch attempts: ${res.status}`);
-    }
-
-    return await res.json();
-
-  } catch (err) {
-    console.error("Error fetching session attempts:", err);
-    return null;
-  }
+export async function getHardestSend(userId){
 }
 
-export async function getUserSessionAttempts(sessionId, token){
-  try {  
-    const res = await fetch(`/api/attempts/${sessionId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-      }
-    });
-    
-    if (!res.ok) {
-      throw new Error(`Failed to fetch attempts: ${res.status}`);
-    }
-
-    return await res.json();
-
-  } catch (err) {
-    console.error("Error fetching session attempts:", err);
-    return null;
-  }
-}
-
-export async function getSessionClimbs(sessionID, token){
-  try {
-      const res = await fetch(`/api/session/${sessionID}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-      }
-    });
-
-      if (!res.ok) {
-      throw new Error(`Failed to fetch attempts: ${res.status}`);
-    }
-
-    return await res.json();
-
-  } catch (err) {
-    console.error("Error fetching session attempts:", err);
-    return null;
-  }
-}
-
-export async function getUserSends(userId, token){
-  try {  
-    const res = await fetch(`/api/sends/${userId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-      }
-    });
-    
-    if (!res.ok) {
-      throw new Error(`Failed to fetch attempts: ${res.status}`);
-    }
-
-    return await res.json();
-
-  } catch (err) {
-    console.error("Error fetching session attempts:", err);
-    return null;
-  }
+export async function getUserSessionAttempts(userId, sessionId, token){
 }
