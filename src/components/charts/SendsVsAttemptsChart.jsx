@@ -13,7 +13,7 @@ export default function SendsVsAttemptsChart({ data = [] }) {
       <div style={{ width: "100%", height: 200 }}>
         <ResponsiveContainer>
           <PieChart>
-            <Pie data={data} dataKey="value" nameKey="name" innerRadius="50%" outerRadius="80%">
+            <Pie stroke="none" data={data} dataKey="value" nameKey="name" innerRadius="50%" outerRadius="80%">
               {data.map((_, i) => (
                 <Cell key={i} fill={COLORS[i % COLORS.length]} />
               ))}
