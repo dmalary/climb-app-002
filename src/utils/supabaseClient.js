@@ -6,7 +6,7 @@ const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
 export const createClerkSupabaseClient = function(clerkSupaSession) {
-  createClient(
+  return createClient(
     supabaseUrl, supabaseKey,
     {
       async accessToken() {
