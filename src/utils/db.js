@@ -1,187 +1,87 @@
-// Add this guard in all fetch utils:
-
-// const contentType = res.headers.get("content-type");
-// if (!contentType?.includes("application/json")) {
-//   throw new Error("Non-JSON response received");
-// }
+import { apiFetch } from "./apiFetch"; 
 
 export async function getUsers() {
-  // const res = await fetch("/api/users"); 
   try {
-    // const res = await fetch("/api/users"); 
-    const res = await fetch("/api/users"); 
-
-    if (!res.ok) {
-      throw new Error(`Failed to fetch attempts: ${res.status}`);
-    }
-
-    return await res.json();
-
+    return await apiFetch("/api/users");
   } catch (err) {
-    console.error("Error fetching session attempts:", err);
+    console.error("getUsers:", err);
     return null;
   }
 }
 
 export async function getUser(id, token) {
   try {
-    const res = await fetch(`/api/users/${id}`, { 
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-      }
-    }); 
-
-    // if (!res.ok) {
-    //   throw new Error(`Failed to fetch user: ${res.status}`);
-    // }
-
-    return await res.json();
-
+    return await apiFetch(`/api/users/${id}`, { token });
   } catch (err) {
-    console.error("Error fetching session user:", err);
+    console.error("getUser:", err);
     return null;
   }
 }
 
 export async function getUserSessions(userId, token) {
   try {
-    if (!userId) {
-      console.warn("getUserSessions: no userId provided");
-      return [];
-    }
+    if (!userId) return [];
 
-    const res = await fetch(`/api/sessions/user/${userId}`, {
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` })
-      }
-    });
-
-    if (res.status === 404) {
-      console.warn("No sessions found for this user.");
+    return await apiFetch(`/api/sessions/user/${userId}`, { token });
+  } catch (err) {
+    // preserve your special 404 empty-state behavior
+    if (err.status === 404) {
       return {
         empty: true,
-        message: "Looks like there are no sessions yet — create your first climb session!"
+        message: "Looks like there are no sessions yet — create your first climb session!",
       };
     }
 
-    if (!res.ok) {
-      console.warn(`getUserSessions: received ${res.status}`);
-      return [];
-    }
-
-    return await res.json();
-  } catch (err) {
-    console.error("Error fetching user sessions:", err);
+    console.error("getUserSessions:", err);
     return [];
   }
 }
 
-export async function getSession(sessionId, token){
-  try {  
-    const res = await fetch(`/api/sessions/${sessionId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-      }
-    });
-    
-    if (!res.ok) {
-      throw new Error(`Failed to fetch session: ${res.status}`);
-    }
-
-    return await res.json();
-
+export async function getSession(sessionId, token) {
+  try {
+    return await apiFetch(`/api/sessions/${sessionId}`, { token });
   } catch (err) {
-    console.error("Error fetching session:", err);
+    console.error("getSession:", err);
     return null;
   }
 }
 
-
 export async function getAllSessions() {
   try {
-    const res = await fetch(`/api/sessions`, {
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
-
-    if (!res.ok) {
-      console.warn(`getAllSessions: received ${res.status}`);
-      return [];
-    }
-
-    return await res.json();
+    return await apiFetch(`/api/sessions`);
   } catch (err) {
-    console.error("Error fetching all sessions:", err);
+    console.error("getAllSessions:", err);
     return [];
   }
 }
 
 export async function getUserAttempts(userId, token) {
   try {
-    // Single fetch for ALL attempts
-    const res = await fetch(`/api/attempts/user/${userId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!res.ok) throw new Error(`Failed to fetch attempts: ${res.status}`);
-
-    return await res.json();
+    if (!userId) return [];
+    return await apiFetch(`/api/attempts/user/${userId}`, { token });
   } catch (err) {
-    console.error("Error fetching user attempts:", err);
+    console.error("getUserAttempts:", err);
     return [];
   }
 }
 
-export async function getSessionAttempts(sessionId, token){
-  try {  
-    const res = await fetch(`/api/attempts/${sessionId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-      }
-    });
-    
-    if (!res.ok) {
-      throw new Error(`Failed to fetch attempts: ${res.status}`);
-    }
-
-    return await res.json();
-
+export async function getSessionAttempts(sessionId, token) {
+  try {
+    return await apiFetch(`/api/attempts/${sessionId}`, { token });
   } catch (err) {
-    console.error("Error fetching session attempts:", err);
+    console.error("getSessionAttempts:", err);
     return null;
   }
 }
 
-// review, do i need?
-export async function getAllAttempts(sessionId, token){
-  try {  
-    const res = await fetch(`/api/attempts/`, {
-      headers: {
-        // Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-      }
-    });
-    
-    if (!res.ok) {
-      throw new Error(`Failed to fetch attempts: ${res.status}`);
-    }
-
-    return await res.json();
-
+export async function getAllAttempts() {
+  try {
+    return await apiFetch(`/api/attempts`);
   } catch (err) {
-    console.error("Error fetching session attempts:", err);
+    console.error("getAllAttempts:", err);
     return null;
   }
 }
-
 
 // review below (i may need to implement down the line) 
 // =====================================
