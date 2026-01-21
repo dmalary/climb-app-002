@@ -183,28 +183,29 @@ export async function getAllAttempts(sessionId, token){
 }
 
 
-// review below =====================================
+// review below (i may need to implement down the line) 
+// =====================================
 
-export async function getFollowingSends(userId){
-}
+// export async function getFollowingSends(userId){
+// }
 
-export async function getFollowers(userId){ 
-}
+// export async function getFollowers(userId){ 
+// }
 
-export async function getFollowing(userId){
-}
+// export async function getFollowing(userId){
+// }
 
-export async function getClimberLeaderboard(climbId){
-}
+// export async function getClimberLeaderboard(climbId){
+// }
 
-export async function getGymClimberLeaderboard(climbId){
-}
+// export async function getGymClimberLeaderboard(climbId){
+// }
 
-export async function getGymLeaderboard(climbId){
-}
+// export async function getGymLeaderboard(climbId){
+// }
 
-export async function getHardestSend(userId){
-}
+// export async function getHardestSend(userId){
+// }
 
-export async function getUserSessionAttempts(userId, sessionId, token){
-}
+// export async function getUserSessionAttempts(userId, sessionId, token){
+// }
