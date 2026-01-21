@@ -57,14 +57,75 @@ export function getSessionCharts(attempts = []) {
   // -------------------------
   // Timeline
   // -------------------------
-  const timeline = [...attempts]
-    .sort((a, b) => a.date - b.date)
-    .map((a, i) => ({
-      index: i + 1,
-      grade: a.gradeNum,
-      attempts: a.totalTries,
-      isAscent: a.isAscent,
-    }));
+  // const timeline = [...attempts]
+  //   .sort((a, b) => a.date - b.date)
+  //   .map((a, i) => ({
+  //     index: i + 1,
+  //     grade: a.gradeNum,
+  //     attempts: a.totalTries,
+  //     isAscent: a.isAscent,
+  //   }));
+// -------------------------
+// Timeline (grouped by climb)
+// -------------------------
+const toTime = (d) => {
+  if (!d) return 0;
+  if (typeof d === "number") return d;
+  const t = Date.parse(d);
+  return Number.isFinite(t) ? t : 0;
+};
+
+// Group attempts by climb_uuid (preferred). Fall back to grade@angle key.
+const groups = new Map();
+
+for (const a of attempts) {
+  const climbKey =
+    a.climb_uuid ||
+    a.climbUuid ||
+    a.climb_id ||
+    a.climbId ||
+    `${a.grade ?? "–"} @ ${a.angle ?? "–"}°`;
+
+  if (!groups.has(climbKey)) groups.set(climbKey, []);
+  groups.get(climbKey).push(a);
+}
+
+// Turn each climb group into one timeline point
+const timeline = [...groups.entries()]
+  .map(([key, rows]) => {
+    // sort within group to compute first/last time reliably
+    const sorted = [...rows].sort((x, y) => toTime(x.date) - toTime(y.date));
+    const first = sorted[0];
+
+    const isAscent = sorted.some(r => Boolean(r.isAscent ?? r.is_ascent ?? r.sent ?? r.isSend));
+    const attemptsCount = sorted.reduce((sum, r) => sum + (r.totalTries || 1), 0);
+
+    return {
+      // keep key for debugging / stable identity
+      key,
+
+      // choose a reasonable timestamp for ordering the point
+      time: toTime(first.date),
+
+      // y positioning: prefer numeric grade value if you have it
+      grade: first.gradeNum ?? first.grade_num ?? first.grade_number ?? first.grade,
+
+      // for tooltip + display
+      attempts: attemptsCount,
+      isAscent,
+
+      climb_uuid: first.climb_uuid ?? first.climbUuid,
+      climb_id: first.climb_id ?? first.climbId,
+      climb_name: first.climb_name ?? first.name,
+      angle: first.angle,
+      displayed_grade: first.displayed_grade ?? first.grade_label ?? first.grade,
+    };
+  })
+  .sort((a, b) => a.time - b.time)
+  .map((d, i) => ({
+    ...d,
+    index: i + 1,
+  }));
 
   // -------------------------
   // Micro progression

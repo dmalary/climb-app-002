@@ -22,6 +22,7 @@ export default function SessionChartsCard({ charts }) {
       <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <ChartSection title="Attempts per Climb">
           <AttemptsPerClimbChart data={charts.attemptsPerClimb} />
+          {/* fix: this is showing all attempts ever for climb */}
         </ChartSection>
 
         <ChartSection title="Sends vs Attempts">
