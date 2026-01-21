@@ -1,3 +1,5 @@
+import { supabase } from "@/utils/supabaseClient";
+
 export const getClimbImageUrl = (board, climbId) => {
   const { data } = supabase.storage
     .from("climb-images")
