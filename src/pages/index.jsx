@@ -89,17 +89,6 @@ export default function Home() {
     <AppShell>
       <div className="flex justify-center bg-stone-900 min-h-screen">
         <div className="w-full max-w-lg mx-auto space-y-6">
-          {/* <div className='px-4 flex flex-col gap-2'> */}
-            {/* <DynamicNav type="home" userId={user.id} /> */}
-            
-            {/* user logbook data */}
-            {/* <ImportBoard /> */}
-
-            {/* this is to load non user board data, climbs only. not yet sure how i'm going to use this. possibly to help me display climbs on the board imgs */}
-            {/* <SyncPublic />  */}
-          {/* </div> */}
-
-          {/* {error && <div className="text-red-500">Error loading sessions</div>} */}
 
           <Stream sessionData={sessions} token={token} userId={userId}/>
 

@@ -5,8 +5,7 @@ import { useUser, useAuth } from '@clerk/nextjs'
 import { getUsers, getUserSessions, getUserAttempts } from '@/utils/db';
 import { Geist, Geist_Mono } from "next/font/google";
 import { Skeleton } from "@/components/ui/skeleton"
-// import Dashboard from '@/components/ux/dashboard';
-import DynamicNav from '@/components/ux/DynamicNav';
+import AppShell from "@/components/ux/AppShell";
 
 import StatsOverall from "@/components/ux/stats/StatsOverall";
 import StatsBoard from "@/components/ux/stats/StatsBoard";
@@ -127,40 +126,39 @@ export default function Home() {
   // Render
   // ---------------------------
   return (
-    <div className="flex justify-center bg-stone-900 min-h-screen p-4">
-      <div className="w-full max-w-lg mx-auto space-y-6">
+    <AppShell>
+      <div className="flex justify-center bg-stone-900 min-h-screen p-4">
+        <div className="w-full max-w-lg mx-auto space-y-6">
 
-        {/* Nav */}
-        <DynamicNav type="social" userId={userId} />
+          {/* View Switcher */}
+          <div className="flex w-full rounded-xl bg-stone-800 p-1">
+            {["leaderboards", "challenges"].map((view) => (
+              <button
+                key={view}
+                onClick={() => setSelectedView(view)}
+                className={`
+                  flex-1 py-2 text-sm font-medium capitalize rounded-lg 
+                  transition-all duration-200
+                  ${
+                    selectedView === view
+                      ? "bg-stone-700 text-white"
+                      : "text-stone-400 hover:text-white"
+                  }
+                `}
+              >
+                {view}
+              </button>
+            ))}
+          </div>
 
-        {/* View Switcher */}
-        <div className="flex w-full rounded-xl bg-stone-800 p-1">
-          {["leaderboards", "challenges"].map((view) => (
-            <button
-              key={view}
-              onClick={() => setSelectedView(view)}
-              className={`
-                flex-1 py-2 text-sm font-medium capitalize rounded-lg 
-                transition-all duration-200
-                ${
-                  selectedView === view
-                    ? "bg-stone-700 text-white"
-                    : "text-stone-400 hover:text-white"
-                }
-              `}
-            >
-              {view}
-            </button>
-          ))}
+          {/* Analytics View Content */}
+          {/* <div className="mt-4">
+            {renderView()}
+          </div> */}
+          {/* update to handle leaderboards | challenges */}
+
         </div>
-
-        {/* Analytics View Content */}
-        {/* <div className="mt-4">
-          {renderView()}
-        </div> */}
-        {/* update to handle leaderboards | challenges */}
-
       </div>
-    </div>
+    </AppShell>
   );
 }

@@ -5,8 +5,6 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { getUser, getUserSessions } from "@/utils/db";
 import { Skeleton } from "@/components/ui/skeleton";
-import DynamicNav from '@/components/ux/DynamicNav';
-import Grid from "@/components/ux/grid";
 import Stream from '@/components/ux/Stream';
 import AppShell from "@/components/ux/AppShell";
 
@@ -81,9 +79,6 @@ export default function User() {
     <AppShell>
       <div className="space-y-6">
         {/* Top Nav */}
-        {/* <div className='px-4'>
-          <DynamicNav type="profile" userId={userId} />
-        </div> */}
 
         {/* User Header */}
         <div className="flex items-center gap-4 mt-4 px-4">
