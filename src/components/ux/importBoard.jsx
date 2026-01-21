@@ -73,7 +73,8 @@ export default function ImportBoard() {
         }
       );
 
-      const climbIds = res.data?.imported_climb_ids || [];
+      // const climbIds = res.data?.imported_climb_ids || [];
+      const climbIds = res.data?.imported_climb_uuids || [];
       if (climbIds.length) {
         await axios.post(
           "/api/images/ensure",

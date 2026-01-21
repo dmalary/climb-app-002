@@ -158,8 +158,11 @@ export default function SessionCard({ session, token, username }) {
               {(sends.length ? sends : [{ placeholder: true }]).map(
                 (send, i) => {
                   const imageUrl =
-                    !send.placeholder && send.climb_id
-                      ? getClimbImageUrl(board, send.climb_id)
+                    // !send.placeholder && send.climb_id
+                    //   ? getClimbImageUrl(board, send.climb_id)
+                    //   : null;
+                    !send.placeholder && send.climb_uuid
+                      ? getClimbImageUrl(board, send.climb_uuid)
                       : null;
 
                   return (
