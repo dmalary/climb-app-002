@@ -9,7 +9,7 @@ export default function AppShell({ children }) {
       <TopNav />
 
       {/* main scrollable area */}
-      <main className="flex-1 overflow-y-auto pb-20">
+      <main className="flex-1 overflow-y-auto pb-1">
         {children}
       </main>
 
