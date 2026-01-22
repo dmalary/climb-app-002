@@ -25,103 +25,103 @@ const geistMono = Geist_Mono({
 });
 
 export default function Home() {
-  const { userId, getToken, isSignedIn } = useAuth();
-  // const { user } = useUser(); // user should already exist on this page
+  // const { userId, getToken, isSignedIn } = useAuth();
+  // // const { user } = useUser(); // user should already exist on this page
   
-  const [sessions, setSessions] = useState([]);
-  const [rawAttempts, setRawAttempts] = useState([]);
-  // const [selectedBoards, setSelectedBoards] = useState([]);
-  const [selectedView, setSelectedView] = useState("overall"); 
-  const [isLoading, setIsLoading] = useState(true);
-  // const [token, setToken] = useState(null);
-  // const [error, setError] = useState(0);
+  // const [sessions, setSessions] = useState([]);
+  // const [rawAttempts, setRawAttempts] = useState([]);
+  // // const [selectedBoards, setSelectedBoards] = useState([]);
+  // const [selectedView, setSelectedView] = useState("overall"); 
+  // const [isLoading, setIsLoading] = useState(true);
+  // // const [token, setToken] = useState(null);
+  // // const [error, setError] = useState(0);
   
-  // ---------------------------
-  // Fetch sessions + attempts
-  // ---------------------------
-  useEffect(() => {
-    if (!userId) return;
+  // // ---------------------------
+  // // Fetch sessions + attempts
+  // // ---------------------------
+  // useEffect(() => {
+  //   if (!userId) return;
 
-    async function loadData() {
-      setIsLoading(true);
+  //   async function loadData() {
+  //     setIsLoading(true);
 
-      try {
-        // const token = await getToken({ template: "supabase" });
+  //     try {
+  //       // const token = await getToken({ template: "supabase" });
 
-        const userSessions = await getUserSessions(userId, getToken);
-        setSessions(userSessions || []);
+  //       const userSessions = await getUserSessions(userId, getToken);
+  //       setSessions(userSessions || []);
 
-        const attempts = await getUserAttempts(userId, getToken);
-        // console.log('attempts', attempts)
+  //       const attempts = await getUserAttempts(userId, getToken);
+  //       // console.log('attempts', attempts)
 
-        // 🔑 Normalize grades ONCE here
-        const normalized = (attempts || []).map(a => {
-          const grade = normalizeVGrade(a.displayed_grade);
-          return {
-            ...a,
-            grade,
-            gradeNum: grade ? Number(grade.replace("V", "")) : null,
-          };
-        });
+  //       // 🔑 Normalize grades ONCE here
+  //       const normalized = (attempts || []).map(a => {
+  //         const grade = normalizeVGrade(a.displayed_grade);
+  //         return {
+  //           ...a,
+  //           grade,
+  //           gradeNum: grade ? Number(grade.replace("V", "")) : null,
+  //         };
+  //       });
 
-        setRawAttempts(normalized);
-      } catch (err) {
-        console.error("Error loading analytics:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    }
+  //       setRawAttempts(normalized);
+  //     } catch (err) {
+  //       console.error("Error loading analytics:", err);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   }
 
-    loadData();
-  }, [userId, getToken]);
+  //   loadData();
+  // }, [userId, getToken]);
 
-  // ---------------------------
-  // Skeleton while loading
-  // ---------------------------
-  if (isLoading) {
-    return (
-      <div className="flex justify-center bg-stone-900 min-h-screen">
-        <div className="w-full max-w-lg mx-auto space-y-6">
-          <Skeleton className="h-8 w-[300px]" />
-          <Skeleton className="h-4 w-[400px]" />
-          <Skeleton className="h-4 w-[350px]" />
-        </div>
-      </div>
-    );
-  }
+  // // ---------------------------
+  // // Skeleton while loading
+  // // ---------------------------
+  // if (isLoading) {
+  //   return (
+  //     <div className="flex justify-center bg-stone-900 min-h-screen">
+  //       <div className="w-full max-w-lg mx-auto space-y-6">
+  //         <Skeleton className="h-8 w-[300px]" />
+  //         <Skeleton className="h-4 w-[400px]" />
+  //         <Skeleton className="h-4 w-[350px]" />
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
-  // ---------------------------
-  // Component router based on selectedView
-  // ---------------------------
-  const renderView = () => {
-    if (selectedView === "overall")
-      return (
-        <StatsOverall
-          rawAttempts={rawAttempts}
-          isLoading={isLoading}
-        />
-      );
+  // // ---------------------------
+  // // Component router based on selectedView
+  // // ---------------------------
+  // const renderView = () => {
+  //   if (selectedView === "overall")
+  //     return (
+  //       <StatsOverall
+  //         rawAttempts={rawAttempts}
+  //         isLoading={isLoading}
+  //       />
+  //     );
 
-    if (selectedView === "board")
-      return (
-        <StatsBoard
-          sessions={sessions}
-          rawAttempts={rawAttempts}
-          isLoading={isLoading}
-        />
-      );
+  //   if (selectedView === "board")
+  //     return (
+  //       <StatsBoard
+  //         sessions={sessions}
+  //         rawAttempts={rawAttempts}
+  //         isLoading={isLoading}
+  //       />
+  //     );
 
-    if (selectedView === "session")
-      return (
-        <StatsSession
-          sessions={sessions}
-          rawAttempts={rawAttempts}
-          isLoading={isLoading}
-        />
-      );
+  //   if (selectedView === "session")
+  //     return (
+  //       <StatsSession
+  //         sessions={sessions}
+  //         rawAttempts={rawAttempts}
+  //         isLoading={isLoading}
+  //       />
+  //     );
 
-    return null;
-  };
+  //   return null;
+  // };
 
   // ---------------------------
   // Render
@@ -130,7 +130,9 @@ export default function Home() {
     <AppShell>
       <div className="flex justify-center bg-stone-900 min-h-screen p-4">
         <div className="w-full max-w-lg mx-auto space-y-6">
-          COMING SOON
+          <div className="text-center text-stone-400 py-12">
+            In depth analytics coming soon.
+          </div>
 
           {/* View Switcher */}
           {/* <div className="flex w-full rounded-xl bg-stone-800 p-1">
