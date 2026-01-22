@@ -101,7 +101,7 @@ export default function SessionDetailsPage() {
 
   return (
     <AppShell>
-      <div className="space-y-8 py-6 flex flex-col gap-2">
+      <div className="py-6 flex flex-col gap-2">
         {/* Top carousel turn stream SessionCard into component?*/}
         <div className="flex items-center gap-3 px-4 mb-3">
           <button
