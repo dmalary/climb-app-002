@@ -130,11 +130,10 @@ export default function Home() {
     <AppShell>
       <div className="flex justify-center bg-stone-900 min-h-screen p-4">
         <div className="w-full max-w-lg mx-auto space-y-6">
+          COMING SOON
 
-          {/* Nav */}
-  
           {/* View Switcher */}
-          <div className="flex w-full rounded-xl bg-stone-800 p-1">
+          {/* <div className="flex w-full rounded-xl bg-stone-800 p-1">
             {["overall", "board", "session"].map((view) => (
               <button
                 key={view}
@@ -153,11 +152,12 @@ export default function Home() {
               </button>
             ))}
           </div>
+          */}
 
           {/* Analytics View Content */}
-          <div className="mt-4">
+          {/* <div className="mt-4">
             {renderView()}
-          </div>
+          </div>  */}
 
         </div>
       </div>
