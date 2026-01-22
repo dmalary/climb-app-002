@@ -83,6 +83,77 @@ export async function getAllAttempts() {
   }
 }
 
+export async function getFeed(token, { limit = 20, offset = 0 } = {}) {
+    try {
+    return await apiFetch(`/api/feed?limit=${limit}&offset=${offset}`, { token });
+  } catch (err) {
+    console.error("Feed fetch failed::", err);
+    return null;
+  }
+}
+
+// Likes
+export async function likeSession(sessionId, token) {
+  try {
+    return await apiFetch(`/api/socials/sessions/${sessionId}/like`, {
+      method: "POST",
+      token,
+    });
+  } catch (err) {
+    console.error("likeSession:", err);
+    return null;
+  }
+}
+
+export async function unlikeSession(sessionId, token) {
+  try {
+    return await apiFetch(`/api/socials/sessions/${sessionId}/like`, {
+      method: "DELETE",
+      token,
+    });
+  } catch (err) {
+    console.error("unlikeSession:", err);
+    return null;
+  }
+}
+
+// Comments
+export async function getSessionComments(sessionId, token, { limit = 50, offset = 0 } = {}) {
+  try {
+    const qs = new URLSearchParams({ limit: String(limit), offset: String(offset) });
+    return await apiFetch(`/api/socials/sessions/${sessionId}/comments?${qs.toString()}`, { token });
+  } catch (err) {
+    console.error("getSessionComments:", err);
+    return [];
+  }
+}
+
+export async function addSessionComment(sessionId, body, token) {
+  try {
+    return await apiFetch(`/api/socials/sessions/${sessionId}/comments`, {
+      method: "POST",
+      token,
+      body: { body }, // matches server: req.body.body
+    });
+  } catch (err) {
+    console.error("addSessionComment:", err);
+    return null;
+  }
+}
+
+export async function deleteComment(commentId, token) {
+  try {
+    return await apiFetch(`/api/socials/comments/${commentId}`, {
+      method: "DELETE",
+      token,
+    });
+  } catch (err) {
+    console.error("deleteComment:", err);
+    return null;
+  }
+}
+
+
 // review below (i may need to implement down the line) 
 // =====================================
 

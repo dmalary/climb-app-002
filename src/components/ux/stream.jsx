@@ -15,9 +15,9 @@ export default function Stream({ sessionData = [], token, userId }) {
 
   const router = useRouter();
 
-  const handleClick = () => {
-    sessionStorage.setItem('sessionReturnPath', router.asPath)
-  };
+  // const handleClick = () => {
+  //   sessionStorage.setItem('sessionReturnPath', router.asPath)
+  // };
 
   // console.log('userId', userId) // get username from userID, pass down to card
   // -------------------------------------------
@@ -80,18 +80,18 @@ if (!Array.isArray(sessionData) || sessionData.length === 0) {
 return (
     <div className="flex flex-col gap-2 w-full">
     {items.map((session) => (
-      <Link
-        key={session.id}
-        href={`/sessions/${session.id}`}
-        onClick={handleClick}
-        className="block"
-      >
+      // <Link
+      //   key={session.id}
+      //   href={`/sessions/${session.id}`}
+      //   onClick={handleClick}
+      //   className="block"
+      // >
         <SessionCard
           session={session}
           token={token}
           username={username}
         />
-      </Link>
+      // </Link>
     ))}
 
       <div
