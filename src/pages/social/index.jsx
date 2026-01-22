@@ -32,9 +32,9 @@ export default function Home() {
   // const [selectedBoards, setSelectedBoards] = useState([]);
   const [selectedView, setSelectedView] = useState("leaderboards"); 
   const [isLoading, setIsLoading] = useState(true);
-  const [token, setToken] = useState(null);
+  // const [token, setToken] = useState(null);
   // const [error, setError] = useState(0);
-  
+    
   // ---------------------------
   // Fetch sessions + attempts
   // ---------------------------
@@ -45,12 +45,14 @@ export default function Home() {
       setIsLoading(true);
 
       try {
-        const token = await getToken({ template: "supabase" });
+        // const token = await getToken({ template: "supabase" });
 
-        const userSessions = await getUserSessions(userId, token);
+        // const userSessions = await getUserSessions(userId, token);
+        const userSessions = await getUserSessions(userId, getToken);
         setSessions(userSessions || []);
 
-        const attempts = await getUserAttempts(userId, token);
+        // const attempts = await getUserAttempts(userId, token);
+        const attempts = await getUserAttempts(userId, getToken);
         // console.log('attempts', attempts)
 
         // 🔑 Normalize grades ONCE here

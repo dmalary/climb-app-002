@@ -29,37 +29,41 @@ export default function SessionDetailsPage() {
   const { sessionId } = router.query;
   
   const { getToken, isSignedIn } = useAuth();
-  const [token, setToken] = useState(null);
+  // const [token, setToken] = useState(null);
 
   const [session, setSession] = useState(null);
   const [attempts, setAttempts] = useState(null);
 
   // 🔐 get token
-  useEffect(() => {
-    if (!isSignedIn) return;
+  // useEffect(() => {
+  //   if (!isSignedIn) return;
 
-    async function loadToken() {
-      const t = await getToken();
-      setToken(t);
-    }
+  //   async function loadToken() {
+  //     const t = await getToken();
+  //     setToken(t);
+  //   }
 
-    loadToken();
-  }, [isSignedIn, getToken]);
+  //   loadToken();
+  // }, [isSignedIn, getToken]);
 
   // 📦 fetch session data
   useEffect(() => {
-    if (!router.isReady || !sessionId || !token) return;
+    if (!router.isReady || !sessionId) return;
 
     async function loadSession() {
-      const s = await getSession(sessionId, token);
-      const a = await getSessionAttempts(sessionId, token);
+      
+
+      // const s = await getSession(sessionId, token);
+      // const a = await getSessionAttempts(sessionId, token);
+      const s = await getSession(sessionId, getToken);
+      const a = await getSessionAttempts(sessionId, getToken);
 
       setSession(s);
       setAttempts(cleanAttempts(a || []));
     }
 
     loadSession();
-  }, [router.isReady, sessionId, token]);
+  }, [router.isReady, sessionId]);
 
   // history-aware navigation
   const handleBack = () => {

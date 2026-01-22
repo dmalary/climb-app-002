@@ -9,73 +9,48 @@
  *  - token OR getToken
  *  - allowNonJson: true (if you ever fetch blobs/text)
  */
-export async function apiFetch(
-  url,
-  {
-    method = "GET",
-    body,
-    headers = {},
-    token,
-    getToken,
-    allowNonJson = false,
-  } = {}
-) {
-  // Resolve token if a token callback is provided
-  const resolvedToken =
-    token ?? (typeof getToken === "function" ? await getToken() : undefined);
 
-  const mergedHeaders = {
-    // only set JSON content-type if we're sending a body
-    ...(body !== undefined ? { "Content-Type": "application/json" } : {}),
-    ...(resolvedToken ? { Authorization: `Bearer ${resolvedToken}` } : {}),
-    ...headers,
-  };
+export async function apiFetch(path, { getToken, token, retry = true, ...opts } = {}) {
+  const authToken = token ?? (getToken ? await getToken() : null);
 
-  const res = await fetch(url, {
-    method,
-    headers: mergedHeaders,
-    body: body !== undefined ? JSON.stringify(body) : undefined,
-  });
+  const headers = new Headers(opts.headers || {});
+  if (authToken) headers.set("Authorization", `Bearer ${authToken}`);
+  headers.set("Accept", "application/json");
 
-  // 204 No Content
-  if (res.status === 204) return null;
-
+  const res = await fetch(path, { ...opts, headers });
   const contentType = res.headers.get("content-type") || "";
-  const isJson = contentType.includes("application/json");
 
-  // If caller expects non-JSON (rare), let them handle it.
+  // If we got HTML, it's almost certainly middleware rewrite due to auth
+  const isJson = contentType.includes("application/json");
   if (!isJson) {
-    if (allowNonJson) {
-      const text = await res.text().catch(() => "");
-      if (!res.ok) {
-        throw new Error(
-          `Request failed (${res.status}): ${text || res.statusText}`
-        );
+    const text = await res.text().catch(() => "");
+    const preview = text.slice(0, 200).replace(/\s+/g, " ");
+    const err = new Error(
+      `Non-JSON response (${res.status}) for ${res.url}. content-type="${contentType}". preview="${preview}"`
+    );
+    err.status = res.status;
+    err.contentType = contentType;
+    err.url = res.url;
+
+    // If token likely expired, retry once with a freshly fetched token
+    if (retry && getToken) {
+      const fresh = await getToken({ skipCache: true }).catch(() => null);
+      if (fresh && fresh !== authToken) {
+        return apiFetch(path, { ...opts, getToken, token: fresh, retry: false });
       }
-      return text;
     }
 
-    // Your guard
-    throw new Error(
-      `Non-JSON response received (${res.status}). content-type="${contentType}"`
-    );
+    throw err;
   }
 
-  const data = await res.json().catch(() => null);
-
+  // JSON path
   if (!res.ok) {
-    // Prefer server-provided error fields
-    const msg =
-      data?.error ||
-      data?.message ||
-      data?.details ||
-      `Request failed (${res.status})`;
-
-    const err = new Error(msg);
+    const data = await res.json().catch(() => null);
+    const err = new Error(`Request failed (${res.status}) for ${res.url}`);
     err.status = res.status;
     err.data = data;
     throw err;
   }
 
-  return data;
+  return res.json();
 }

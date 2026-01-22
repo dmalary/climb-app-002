@@ -25,7 +25,7 @@ import { getClimbImageUrl } from "@/utils/climbImageHelper";
 
 // add session summary mini card
 
-export default function SessionCard({ session, token, username }) {
+export default function SessionCard({ session, getToken, username }) {
   const [attempts, setAttempts] = useState(null);
   const [gradeDistributionData, setGradeDistributionData] = useState([]);
   const [liked, setLiked] = useState(Boolean(session.did_like)); // from feed RPC if available
@@ -34,14 +34,14 @@ export default function SessionCard({ session, token, username }) {
 
   useEffect(() => {
     async function loadAttempts() {
-      const data = await getSessionAttempts(session.id, token);
+      const data = await getSessionAttempts(session.id, getToken);
       setAttempts(data || []);
 
       const cleaned = cleanAttempts(data);
       setGradeDistributionData(getGradeHistogram(cleaned));
     }
     loadAttempts();
-  }, [session.id, token]);
+  }, [session.id]);
 
   const sessionDate = new Date(session.date).toLocaleDateString("en-US", {
     month: "short",
@@ -71,7 +71,7 @@ export default function SessionCard({ session, token, username }) {
   async function handleLikeClick(e) {
     stopCardNav(e);
 
-    if (!token) return;
+    if (!getToken) return;
 
     const nextLiked = !liked;
 
@@ -81,9 +81,9 @@ export default function SessionCard({ session, token, username }) {
 
     try {
       if (nextLiked) {
-        await likeSession(session.id, token);
+        await likeSession(session.id, getToken);
       } else {
-        await unlikeSession(session.id, token);
+        await unlikeSession(session.id, getToken);
       }
     } catch (err) {
       console.error("toggle like failed:", err);

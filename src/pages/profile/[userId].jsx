@@ -1,55 +1,49 @@
-"use client";
-
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { getUser, getUserSessions } from "@/utils/db";
 import { Skeleton } from "@/components/ui/skeleton";
-import Stream from '@/components/ux/Stream';
+import Stream from "@/components/ux/Stream";
 import AppShell from "@/components/ux/AppShell";
-
 
 export default function User() {
   const router = useRouter();
   const { getToken, isSignedIn } = useAuth();
-  const [token, setToken] = useState(null);
   const userId = router.query.userId;
+
   const [userData, setUserData] = useState(null);
   const [sessions, setSessions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  const [feed, setFeed] = useState(0); // this is data for the stream
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function loadData() {
       try {
         if (!userId) return;
-        // if (!userId || !isSignedIn) return;
+        // If this page requires auth, uncomment:
+        // if (!isSignedIn) return;
 
         setIsLoading(true);
-        const t = await getToken();
-        setToken(t)
-        // const userRes = await getUser(userId);
-        // setUserData(userRes);
+        setError(null);
 
-        const sessionsRes = await getUserSessions(userId);
-        // const sessionsRes = await getUserSessions(userId, t);
+        // Fetch user + sessions WITH getToken (fresh each request)
+        const [u, sessionsRes] = await Promise.all([
+          getUser(userId, getToken),
+          getUserSessions(userId, getToken),
+        ]);
+
+        setUserData(u);
         setSessions(sessionsRes);
-        // const sessionsRes = await Promise.all([getUserSessions(userId)]);
-        // setSessions([...(sessionsRes || [])]);
-
-        setIsLoading(false);
       } catch (err) {
-        console.error("Error fetching data:", err);
-        setError(err)
+        console.error("Error fetching profile:", err);
+        setError(err);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
     }
 
-
     loadData();
-  }, [userId]);
+  }, [userId, getToken /*, isSignedIn */]);
 
   if (isLoading) {
     return (
@@ -66,39 +60,25 @@ export default function User() {
     );
   }
 
-  // if (!userData) {
-  //   return (
-  //     <div className="text-center text-stone-300 p-6">
-  //       Could not load user profile.
-  //     </div>
-  //   );
-  // }
-  // console.log('userData', userData) // currently returning null FIX!
+  const username = userData?.username || "User";
 
   return (
     <AppShell>
       <div className="space-y-6">
-        {/* Top Nav */}
-
-        {/* User Header */}
         <div className="flex items-center gap-4 mt-4 px-4">
           <div className="h-14 w-14 rounded-full bg-stone-700 flex items-center justify-center text-white text-lg font-semibold">
-            {/* {userData?.username?.[0]?.toUpperCase() || "U"} */}
-            {"U"}
+            {username?.[0]?.toUpperCase() || "U"}
           </div>
           <div>
-            <h1 className="text-xl font-semibold text-stone-100">
-              {/* {userData?.username || "User"} */}
-              {"User"}
-            </h1>
+            <h1 className="text-xl font-semibold text-stone-100">{username}</h1>
             <p className="text-sm text-stone-400">
               {Array.isArray(sessions) ? sessions.length : 0} sessions logged
             </p>
           </div>
         </div>
 
-        {/* Grid (your stats + charts) */}
-        <Stream sessionData={sessions} token={token} userId={userId}/>
+        {/* Pass getToken down, not token */}
+        <Stream sessionData={sessions} getToken={getToken} userId={userId} />
       </div>
     </AppShell>
   );

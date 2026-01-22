@@ -1,97 +1,89 @@
 import { useEffect, useState, useRef } from "react";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import { getUser } from "@/utils/db";
 import SessionCard from "@/components/ux/sessions/SessionCard"
 
-
-export default function Stream({ sessionData = [], token, userId }) {
+export default function Stream({ sessionData = [], getToken, userId }) {
   const BATCH_SIZE = 10;
 
   const [visibleCount, setVisibleCount] = useState(BATCH_SIZE);
   const [items, setItems] = useState(sessionData.slice(0, BATCH_SIZE));
+  const [username, setUsername] = useState("");
+  
   const loaderRef = useRef(null);
-  const [username, setUsername] = useState(null);
 
-  const router = useRouter();
-
-  // const handleClick = () => {
-  //   sessionStorage.setItem('sessionReturnPath', router.asPath)
-  // };
-
-  // console.log('userId', userId) // get username from userID, pass down to card
   // -------------------------------------------
   // Infinite scroll lazy loading
   // -------------------------------------------
+  // Reset pagination when data changes
   useEffect(() => {
+    setVisibleCount(BATCH_SIZE);
+    setItems(sessionData.slice(0, BATCH_SIZE));
+  }, [sessionData]);
+
+  // Load username (auth-safe)
+  useEffect(() => {
+    let cancelled = false;
+
     async function loadUsername() {
       if (!userId) return;
-
       try {
-        const un = await getUser(userId, token);
-        setUsername(un.username || "");
+        const un = await getUser(userId, getToken); // <-- pass getToken
+        if (!cancelled) setUsername(un?.username || "");
       } catch (err) {
-        console.error("Error loading usename:", err);
+        console.error("Error loading username:", err);
+        if (!cancelled) setUsername("");
       }
     }
 
     loadUsername();
 
+    return () => {
+      cancelled = true;
+    };
+  }, [userId, getToken]);
+
+  // Infinite scroll observer
+  useEffect(() => {
+    if (!Array.isArray(sessionData) || sessionData.length === 0) return;
+
+    const el = loaderRef.current;
+    if (!el) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) {
-          const nextCount = visibleCount + BATCH_SIZE;
-          setVisibleCount(nextCount);
-          setItems(sessionData.slice(0, nextCount));
-        }
+        if (!entries[0]?.isIntersecting) return;
+
+        setVisibleCount((prev) => {
+          const next = prev + BATCH_SIZE;
+          setItems(sessionData.slice(0, next));
+          return next;
+        });
       },
       { threshold: 1 }
     );
 
-    if (loaderRef.current) observer.observe(loaderRef.current);
+    observer.observe(el);
 
-    return () => {
-      if (loaderRef.current) observer.unobserve(loaderRef.current);
-    };
-  }, [visibleCount, sessionData]);
+    return () => observer.disconnect();
+  }, [sessionData]);
 
-    // console.log('username', username)
+  if (!Array.isArray(sessionData) || sessionData.length === 0) {
+    return (
+      <div className="text-center text-stone-400 py-12">
+        No climbing data yet.<br />
+        Import your board to get started.
+      </div>
+    );
+  }
 
-{/* <button
-  className="flex items-center gap-1 hover:text-stone-300 transition"
-  onClick={(e) => {
-    e.preventDefault();
-    e.stopPropagation();
-  }}
->
-  <Heart className="h-5 w-5" />
-</button>
-This is exactly how Instagram-style cards work. */}
-
-if (!Array.isArray(sessionData) || sessionData.length === 0) {
   return (
-    <div className="text-center text-stone-400 py-12">
-      No climbing data yet.<br />
-      Import your board to get started.
-    </div>
-  );
-}
-
-return (
     <div className="flex flex-col gap-2 w-full">
     {items.map((session) => (
-      // <Link
-      //   key={session.id}
-      //   href={`/sessions/${session.id}`}
-      //   onClick={handleClick}
-      //   className="block"
-      // >
         <SessionCard
           session={session}
-          token={token}
+          getToken={getToken}
           username={username}
         />
-      // </Link>
     ))}
 
       <div

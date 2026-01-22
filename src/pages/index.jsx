@@ -28,7 +28,7 @@ const geistMono = Geist_Mono({
 export default function Home() {
   const { userId, getToken, isSignedIn } = useAuth();
   const { user } = useUser(); // user should already exist on this page
-  const [token, setToken] = useState(null);
+  // const [token, setToken] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(0);
   
@@ -41,16 +41,17 @@ export default function Home() {
         if (!userId) return;
 
         setIsLoading(true);
-        const t = await getToken();
-        setToken(t);
+
+        // const t = await getToken();
+        // setToken(t);
 
         // const [mySessions, followingSessions] = await Promise.all([
         //   getUserSessions(user, token),
         //   getUserFollowSessions(user.id, token)
         // ]);
         // const [mySessions] = await Promise.all([getUserSessions()]);
-        const [allSessions] = await Promise.all([getAllSessions()]);
-        // const [allSessions] = await getAllSessions();
+        // const [allSessions] = await Promise.all([getAllSessions()]);
+        const allSessions = await getAllSessions(getToken);
 
         // const feedData = [...mySessions , ...followingSessions]
         // const feedData = [...(mySessions || [])]
@@ -90,7 +91,7 @@ export default function Home() {
       <div className="flex justify-center bg-stone-900 min-h-screen">
         <div className="w-full max-w-lg mx-auto space-y-6">
 
-          <Stream sessionData={sessions} token={token} userId={userId}/>
+          <Stream sessionData={sessions} getToken={getToken} userId={userId}/>
 
         </div>
       </div>
